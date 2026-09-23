@@ -1,0 +1,708 @@
+{
+  "version": "1.0.0",
+  "built_at": "2026-09-23T15:53:04.521Z",
+  "horizons": [
+    1,
+    3,
+    7,
+    14,
+    30
+  ],
+  "flow_window_days": 7,
+  "tokens": [
+    {
+      "chain": "ethereum",
+      "token_address": "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e",
+      "symbol": "CRVUSD"
+    },
+    {
+      "chain": "base",
+      "token_address": "0x4200000000000000000000000000000000000006",
+      "symbol": "WETH"
+    },
+    {
+      "chain": "solana",
+      "token_address": "USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB",
+      "symbol": "USD1"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "ethereum:CRVUSD:2026-02-01",
+      "token": {
+        "chain": "ethereum",
+        "token_address": "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e",
+        "symbol": "CRVUSD"
+      },
+      "as_of": "2026-02-01",
+      "signal": {
+        "smart_trader": {
+          "net_flow_usd": 503333.8209620097,
+          "avg_flow_usd": 503333.82104861306,
+          "wallet_count": 2
+        },
+        "whale": {
+          "net_flow_usd": 4902238.335290117,
+          "avg_flow_usd": 4401946.408047087,
+          "wallet_count": 10
+        },
+        "top_pnl": {
+          "net_flow_usd": 13438347.52910478,
+          "avg_flow_usd": 6361785.855699429,
+          "wallet_count": 30
+        },
+        "public_figure": {
+          "net_flow_usd": 511598.9340012312,
+          "avg_flow_usd": 64296.38644787378,
+          "wallet_count": 4
+        },
+        "exchange": {
+          "net_flow_usd": -33020983.80847689,
+          "avg_flow_usd": 8733966.85694221,
+          "wallet_count": 0
+        },
+        "fresh_wallets": {
+          "net_flow_usd": 9411998.982710544,
+          "avg_flow_usd": 3064831.346294541,
+          "wallet_count": 0
+        }
+      },
+      "price_at_as_of": 0.9920619368064375,
+      "outcome": {
+        "forward_return": {
+          "1": 0.0047152706230122465,
+          "3": 0.002216996123680204,
+          "7": 0.007164520632087834,
+          "14": 0.0045209267503973916,
+          "30": 0.006661948195446632
+        },
+        "max_drawdown": -0.018712031135215135
+      },
+      "provenance": {
+        "flow_window_days": 7,
+        "fetched_at": "2026-09-23T15:52:32.553Z"
+      }
+    },
+    {
+      "id": "ethereum:CRVUSD:2026-04-02",
+      "token": {
+        "chain": "ethereum",
+        "token_address": "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e",
+        "symbol": "CRVUSD"
+      },
+      "as_of": "2026-04-02",
+      "signal": {
+        "smart_trader": {
+          "net_flow_usd": 0,
+          "avg_flow_usd": 516.7261342626679,
+          "wallet_count": 0
+        },
+        "whale": {
+          "net_flow_usd": -12177.84218187793,
+          "avg_flow_usd": 7128.914785182038,
+          "wallet_count": 2
+        },
+        "top_pnl": {
+          "net_flow_usd": -9441461.583048992,
+          "avg_flow_usd": 2101200.5283714933,
+          "wallet_count": 14
+        },
+        "public_figure": {
+          "net_flow_usd": -113062.26329401947,
+          "avg_flow_usd": 33924.66058774107,
+          "wallet_count": 4
+        },
+        "exchange": {
+          "net_flow_usd": 9657765.101705639,
+          "avg_flow_usd": 3152071.5674179136,
+          "wallet_count": 0
+        },
+        "fresh_wallets": {
+          "net_flow_usd": 2811166.900422108,
+          "avg_flow_usd": 641396.1927475322,
+          "wallet_count": 0
+        }
+      },
+      "price_at_as_of": 0.9971108727898534,
+      "outcome": {
+        "forward_return": {
+          "1": 0.0011526039242777397,
+          "3": 0.0022940249895904152,
+          "7": 0.003432092118789143,
+          "14": 0.002627246574314901,
+          "30": 0.002728694260212494
+        },
+        "max_drawdown": -0.004876507165252564
+      },
+      "provenance": {
+        "flow_window_days": 7,
+        "fetched_at": "2026-09-23T15:52:34.003Z"
+      }
+    },
+    {
+      "id": "ethereum:CRVUSD:2026-06-01",
+      "token": {
+        "chain": "ethereum",
+        "token_address": "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e",
+        "symbol": "CRVUSD"
+      },
+      "as_of": "2026-06-01",
+      "signal": {
+        "smart_trader": {
+          "net_flow_usd": 0,
+          "avg_flow_usd": 0,
+          "wallet_count": 0
+        },
+        "whale": {
+          "net_flow_usd": -24837.042386655372,
+          "avg_flow_usd": 192473.96765574938,
+          "wallet_count": 7
+        },
+        "top_pnl": {
+          "net_flow_usd": -10238960.623852542,
+          "avg_flow_usd": 4836157.266848138,
+          "wallet_count": 11
+        },
+        "public_figure": {
+          "net_flow_usd": -12675.54065004363,
+          "avg_flow_usd": 12813.558874550266,
+          "wallet_count": 3
+        },
+        "exchange": {
+          "net_flow_usd": 21855993.85108736,
+          "avg_flow_usd": 4693087.598115515,
+          "wallet_count": 0
+        },
+        "fresh_wallets": {
+          "net_flow_usd": 1083518881.141448,
+          "avg_flow_usd": 1720969831.5310125,
+          "wallet_count": 0
+        }
+      },
+      "price_at_as_of": 0.998273731913744,
+      "outcome": {
+        "forward_return": {
+          "1": 0.00046547142840958067,
+          "3": 0.00048028482046413856,
+          "7": 0.00107756323906405,
+          "14": 0.0012181426956445751,
+          "30": 0.0008183144517481811
+        },
+        "max_drawdown": -0.003086104298127945
+      },
+      "provenance": {
+        "flow_window_days": 7,
+        "fetched_at": "2026-09-23T15:52:35.384Z"
+      }
+    },
+    {
+      "id": "ethereum:CRVUSD:2026-07-31",
+      "token": {
+        "chain": "ethereum",
+        "token_address": "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e",
+        "symbol": "CRVUSD"
+      },
+      "as_of": "2026-07-31",
+      "signal": {
+        "smart_trader": {
+          "net_flow_usd": 0,
+          "avg_flow_usd": 0,
+          "wallet_count": 0
+        },
+        "whale": {
+          "net_flow_usd": -6055.434198267259,
+          "avg_flow_usd": 10015.22316931412,
+          "wallet_count": 1
+        },
+        "top_pnl": {
+          "net_flow_usd": 38276.335560470994,
+          "avg_flow_usd": 155035.62496661945,
+          "wallet_count": 6
+        },
+        "public_figure": {
+          "net_flow_usd": -8025.383083368286,
+          "avg_flow_usd": 17015.015481779134,
+          "wallet_count": 1
+        },
+        "exchange": {
+          "net_flow_usd": 2845081.6957453643,
+          "avg_flow_usd": 1190283.7223858777,
+          "wallet_count": 0
+        },
+        "fresh_wallets": {
+          "net_flow_usd": 4262671.655368364,
+          "avg_flow_usd": 453891.80529163394,
+          "wallet_count": 0
+        }
+      },
+      "price_at_as_of": 0.9989971274473174,
+      "outcome": {
+        "forward_return": {
+          "1": 0.0001462612933309515,
+          "3": 0.00008251728465724639,
+          "7": 0.0003525405793365355,
+          "14": 0.000835858653674304,
+          "30": 0.00039691471570568737
+        },
+        "max_drawdown": -0.02515366949778397
+      },
+      "provenance": {
+        "flow_window_days": 7,
+        "fetched_at": "2026-09-23T15:52:36.150Z"
+      }
+    },
+    {
+      "id": "base:WETH:2026-02-01",
+      "token": {
+        "chain": "base",
+        "token_address": "0x4200000000000000000000000000000000000006",
+        "symbol": "WETH"
+      },
+      "as_of": "2026-02-01",
+      "signal": {
+        "smart_trader": {
+          "net_flow_usd": 174859.46878592548,
+          "avg_flow_usd": 174859.4686007031,
+          "wallet_count": 3
+        },
+        "whale": {
+          "net_flow_usd": 22931706.817495823,
+          "avg_flow_usd": 14658702.170837795,
+          "wallet_count": 15
+        },
+        "top_pnl": {
+          "net_flow_usd": 14068788.79451165,
+          "avg_flow_usd": 23735033.862134848,
+          "wallet_count": 75
+        },
+        "public_figure": {
+          "net_flow_usd": -64894.75546136945,
+          "avg_flow_usd": 64894.755462204725,
+          "wallet_count": 7
+        },
+        "exchange": {
+          "net_flow_usd": 19153735.672412757,
+          "avg_flow_usd": 42762685.881862454,
+          "wallet_count": 0
+        },
+        "fresh_wallets": {
+          "net_flow_usd": 64971967232.6908,
+          "avg_flow_usd": 23325214901.376602,
+          "wallet_count": 0
+        }
+      },
+      "price_at_as_of": 2271.3021293254196,
+      "outcome": {
+        "forward_return": {
+          "1": 0.032373863479260745,
+          "3": -0.05454249569375347,
+          "7": -0.07706505858767854,
+          "14": -0.13501086627505954,
+          "30": -0.1263891612421414
+        },
+        "max_drawdown": -0.22325780078205681
+      },
+      "provenance": {
+        "flow_window_days": 7,
+        "fetched_at": "2026-09-23T15:52:42.810Z"
+      }
+    },
+    {
+      "id": "base:WETH:2026-04-02",
+      "token": {
+        "chain": "base",
+        "token_address": "0x4200000000000000000000000000000000000006",
+        "symbol": "WETH"
+      },
+      "as_of": "2026-04-02",
+      "signal": {
+        "smart_trader": {
+          "net_flow_usd": 0,
+          "avg_flow_usd": 0,
+          "wallet_count": 0
+        },
+        "whale": {
+          "net_flow_usd": 7709193.8520481875,
+          "avg_flow_usd": 7035251.208497075,
+          "wallet_count": 2
+        },
+        "top_pnl": {
+          "net_flow_usd": -4712418.328870751,
+          "avg_flow_usd": 6510016.937237677,
+          "wallet_count": 56
+        },
+        "public_figure": {
+          "net_flow_usd": -13511.889214138962,
+          "avg_flow_usd": 2275.0499145361014,
+          "wallet_count": 3
+        },
+        "exchange": {
+          "net_flow_usd": -39686184.426956184,
+          "avg_flow_usd": 11021304.640973957,
+          "wallet_count": 0
+        },
+        "fresh_wallets": {
+          "net_flow_usd": 151347927264.98624,
+          "avg_flow_usd": 127552168502.47783,
+          "wallet_count": 0
+        }
+      },
+      "price_at_as_of": 2056.007390568277,
+      "outcome": {
+        "forward_return": {
+          "1": -0.0013816638795877134,
+          "3": 0.025986918386227575,
+          "7": 0.06468045921437837,
+          "14": 0.14255393612533962,
+          "30": 0.12660982420596611
+        },
+        "max_drawdown": -0.016230460810070735
+      },
+      "provenance": {
+        "flow_window_days": 7,
+        "fetched_at": "2026-09-23T15:52:46.445Z"
+      }
+    },
+    {
+      "id": "base:WETH:2026-06-01",
+      "token": {
+        "chain": "base",
+        "token_address": "0x4200000000000000000000000000000000000006",
+        "symbol": "WETH"
+      },
+      "as_of": "2026-06-01",
+      "signal": {
+        "smart_trader": {
+          "net_flow_usd": -8265.829106465972,
+          "avg_flow_usd": 17597.72653425753,
+          "wallet_count": 4
+        },
+        "whale": {
+          "net_flow_usd": 9506080.178644586,
+          "avg_flow_usd": 9311737.30640519,
+          "wallet_count": 5
+        },
+        "top_pnl": {
+          "net_flow_usd": -2489909.675728975,
+          "avg_flow_usd": 4489592.206144183,
+          "wallet_count": 40
+        },
+        "public_figure": {
+          "net_flow_usd": -1515.4460178141412,
+          "avg_flow_usd": 8254.395458556166,
+          "wallet_count": 7
+        },
+        "exchange": {
+          "net_flow_usd": -52272048.774698034,
+          "avg_flow_usd": 31170290.58952786,
+          "wallet_count": 0
+        },
+        "fresh_wallets": {
+          "net_flow_usd": 21036803091.44685,
+          "avg_flow_usd": 11883447920.95303,
+          "wallet_count": 0
+        }
+      },
+      "price_at_as_of": 2004.0079695429945,
+      "outcome": {
+        "forward_return": {
+          "1": -0.07248280766413417,
+          "3": -0.11743553531723483,
+          "7": -0.15690776479380364,
+          "14": -0.10510621816314158,
+          "30": -0.19755741589600084
+        },
+        "max_drawdown": -0.2465621320150494
+      },
+      "provenance": {
+        "flow_window_days": 7,
+        "fetched_at": "2026-09-23T15:52:49.330Z"
+      }
+    },
+    {
+      "id": "base:WETH:2026-07-31",
+      "token": {
+        "chain": "base",
+        "token_address": "0x4200000000000000000000000000000000000006",
+        "symbol": "WETH"
+      },
+      "as_of": "2026-07-31",
+      "signal": {
+        "smart_trader": {
+          "net_flow_usd": 0,
+          "avg_flow_usd": 101.75174968578264,
+          "wallet_count": 0
+        },
+        "whale": {
+          "net_flow_usd": 0,
+          "avg_flow_usd": 0,
+          "wallet_count": 0
+        },
+        "top_pnl": {
+          "net_flow_usd": -25369597.660074033,
+          "avg_flow_usd": 19894426.244712576,
+          "wallet_count": 34
+        },
+        "public_figure": {
+          "net_flow_usd": 545.0023289671668,
+          "avg_flow_usd": 1167.0851219251772,
+          "wallet_count": 3
+        },
+        "exchange": {
+          "net_flow_usd": -24907016.215136282,
+          "avg_flow_usd": 7282899.481194441,
+          "wallet_count": 0
+        },
+        "fresh_wallets": {
+          "net_flow_usd": 470921072.51902765,
+          "avg_flow_usd": 138907154.9988041,
+          "wallet_count": 0
+        }
+      },
+      "price_at_as_of": 1859.6519932967765,
+      "outcome": {
+        "forward_return": {
+          "1": -0.00883047074489629,
+          "3": -0.0016978930549786941,
+          "7": 0.028940058520588785,
+          "14": 0.011135420378579841,
+          "30": 0.2966838670885208
+        },
+        "max_drawdown": -0.019712949091716836
+      },
+      "provenance": {
+        "flow_window_days": 7,
+        "fetched_at": "2026-09-23T15:52:52.498Z"
+      }
+    },
+    {
+      "id": "solana:USD1:2026-02-01",
+      "token": {
+        "chain": "solana",
+        "token_address": "USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB",
+        "symbol": "USD1"
+      },
+      "as_of": "2026-02-01",
+      "signal": {
+        "smart_trader": {
+          "net_flow_usd": -612.825380077541,
+          "avg_flow_usd": 1330.4262573833198,
+          "wallet_count": 3
+        },
+        "whale": {
+          "net_flow_usd": 1114694.338875105,
+          "avg_flow_usd": 1755096.0862611425,
+          "wallet_count": 23
+        },
+        "top_pnl": {
+          "net_flow_usd": 534279.0011374005,
+          "avg_flow_usd": 588419.1767734794,
+          "wallet_count": 20
+        },
+        "public_figure": {
+          "net_flow_usd": -86106.225413583,
+          "avg_flow_usd": 72959.25333808022,
+          "wallet_count": 12
+        },
+        "exchange": {
+          "net_flow_usd": 228915738.4981634,
+          "avg_flow_usd": 248205634.0400085,
+          "wallet_count": 0
+        },
+        "fresh_wallets": {
+          "net_flow_usd": 279523907.8612726,
+          "avg_flow_usd": 119955493.64164999,
+          "wallet_count": 0
+        }
+      },
+      "price_at_as_of": 0.9989992903659519,
+      "outcome": {
+        "forward_return": {
+          "1": 0.0009255548524855772,
+          "3": 0.00043484115187286676,
+          "7": 0.0019914511025134196,
+          "14": 0.0005255248538584834,
+          "30": 0.0005366527545778155
+        },
+        "max_drawdown": -0.004473099006221726
+      },
+      "provenance": {
+        "flow_window_days": 7,
+        "fetched_at": "2026-09-23T15:52:58.255Z"
+      }
+    },
+    {
+      "id": "solana:USD1:2026-04-02",
+      "token": {
+        "chain": "solana",
+        "token_address": "USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB",
+        "symbol": "USD1"
+      },
+      "as_of": "2026-04-02",
+      "signal": {
+        "smart_trader": {
+          "net_flow_usd": 0,
+          "avg_flow_usd": 0,
+          "wallet_count": 0
+        },
+        "whale": {
+          "net_flow_usd": -313573.2673194394,
+          "avg_flow_usd": 559699.0170880452,
+          "wallet_count": 4
+        },
+        "top_pnl": {
+          "net_flow_usd": 84777.23547916827,
+          "avg_flow_usd": 292188.71343741927,
+          "wallet_count": 4
+        },
+        "public_figure": {
+          "net_flow_usd": -721.2434078168715,
+          "avg_flow_usd": 463.83701862099883,
+          "wallet_count": 2
+        },
+        "exchange": {
+          "net_flow_usd": 21541441.653041624,
+          "avg_flow_usd": 18987997.928013783,
+          "wallet_count": 0
+        },
+        "fresh_wallets": {
+          "net_flow_usd": 40662437.97651162,
+          "avg_flow_usd": 48753999.56352011,
+          "wallet_count": 0
+        }
+      },
+      "price_at_as_of": 0.9996273188197716,
+      "outcome": {
+        "forward_return": {
+          "1": 0.00022935796658596352,
+          "3": -0.0002277135204397096,
+          "7": -0.0003384147763356715,
+          "14": 0.0007280560617142218,
+          "30": 0.00033005921980922004
+        },
+        "max_drawdown": -0.0014221838562425981
+      },
+      "provenance": {
+        "flow_window_days": 7,
+        "fetched_at": "2026-09-23T15:53:01.258Z"
+      }
+    },
+    {
+      "id": "solana:USD1:2026-06-01",
+      "token": {
+        "chain": "solana",
+        "token_address": "USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB",
+        "symbol": "USD1"
+      },
+      "as_of": "2026-06-01",
+      "signal": {
+        "smart_trader": {
+          "net_flow_usd": -185.59803056321928,
+          "avg_flow_usd": 185.59803031410632,
+          "wallet_count": 1
+        },
+        "whale": {
+          "net_flow_usd": -490845.56897836324,
+          "avg_flow_usd": 793168.7705817868,
+          "wallet_count": 2
+        },
+        "top_pnl": {
+          "net_flow_usd": 108068.73820597935,
+          "avg_flow_usd": 30009.879378812657,
+          "wallet_count": 4
+        },
+        "public_figure": {
+          "net_flow_usd": -1161.1271704215612,
+          "avg_flow_usd": 245.1836877989913,
+          "wallet_count": 1
+        },
+        "exchange": {
+          "net_flow_usd": -13487813.456876528,
+          "avg_flow_usd": 39761575.97121783,
+          "wallet_count": 0
+        },
+        "fresh_wallets": {
+          "net_flow_usd": 3890767.2601699545,
+          "avg_flow_usd": 2391925.0351050626,
+          "wallet_count": 0
+        }
+      },
+      "price_at_as_of": 0.9985849175240359,
+      "outcome": {
+        "forward_return": {
+          "1": -0.0003620960885419855,
+          "3": 0.00039686447420850257,
+          "7": 0.0003294881836086727,
+          "14": 0.0015330486614524297,
+          "30": 0.0001405035561721224
+        },
+        "max_drawdown": -0.001401227589169718
+      },
+      "provenance": {
+        "flow_window_days": 7,
+        "fetched_at": "2026-09-23T15:53:02.825Z"
+      }
+    },
+    {
+      "id": "solana:USD1:2026-07-31",
+      "token": {
+        "chain": "solana",
+        "token_address": "USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB",
+        "symbol": "USD1"
+      },
+      "as_of": "2026-07-31",
+      "signal": {
+        "smart_trader": {
+          "net_flow_usd": 0,
+          "avg_flow_usd": 242181.80328094139,
+          "wallet_count": 0
+        },
+        "whale": {
+          "net_flow_usd": -1262.5969428165977,
+          "avg_flow_usd": 1262.5969433199436,
+          "wallet_count": 1
+        },
+        "top_pnl": {
+          "net_flow_usd": -2875.935267297031,
+          "avg_flow_usd": 14097.017657574228,
+          "wallet_count": 1
+        },
+        "public_figure": {
+          "net_flow_usd": -769.8106730361186,
+          "avg_flow_usd": 20438.939363701462,
+          "wallet_count": 4
+        },
+        "exchange": {
+          "net_flow_usd": 16743461.581448331,
+          "avg_flow_usd": 6399122.758679238,
+          "wallet_count": 0
+        },
+        "fresh_wallets": {
+          "net_flow_usd": 250330.8919191204,
+          "avg_flow_usd": 440003.0216105102,
+          "wallet_count": 0
+        }
+      },
+      "price_at_as_of": 0.9989588022324186,
+      "outcome": {
+        "forward_return": {
+          "1": 0.00003766536187099767,
+          "3": 0.00009798235950730927,
+          "7": 0.0009311696034688399,
+          "14": -0.0016011001987117357,
+          "30": 0.0010483267494147963
+        },
+        "max_drawdown": -0.01081037139654295
+      },
+      "provenance": {
+        "flow_window_days": 7,
+        "fetched_at": "2026-09-23T15:53:04.520Z"
+      }
+    }
+  ],
+  "meta": {
+    "api_calls_made": 18,
+    "credits_spent": 78,
+    "source": "Nansen API"
+  }
+}

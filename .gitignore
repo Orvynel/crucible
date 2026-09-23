@@ -1,0 +1,35 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+dist-ssr/
+
+# local env — NEVER commit secrets
+.env
+.env.local
+.env.*.local
+
+# logs
+*.log
+npm-debug.log*
+
+# editor / OS
+.DS_Store
+.vscode/
+.idea/
+.claude/
+*.swp
+
+# raw per-call API cache (kept local; the curated dataset in /public/data is what ships)
+.cache/
+
+# tsc -b incremental build artifacts (source of truth is the .ts files)
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+# local scratch / research notes — not part of the product
+New Text Document*.txt
+*.local.txt
+
