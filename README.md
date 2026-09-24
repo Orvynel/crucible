@@ -1,5 +1,7 @@
 # Crucible
 
+[![CI](https://github.com/Orvynel/crucible/actions/workflows/ci.yml/badge.svg)](https://github.com/Orvynel/crucible/actions/workflows/ci.yml)
+
 **Does Smart Money actually predict price? Compose a rule. Backtest it against real history. See the edge over buy-and-hold — with no look-ahead.**
 
 Crucible turns Nansen cohort flow data into a hypothesis tester. Pick a cohort (Smart Traders, Whales, Top-PnL wallets, Public Figures, Exchanges, Fresh Wallets), say what they must be doing (net buying or net selling, over any threshold), choose a holding period, and Crucible replays the rule across **990 point-in-time scenarios** built from **27 tokens across Ethereum, Base and Solana** — then scores it against the honest baseline: doing nothing.
@@ -74,10 +76,11 @@ CONFIRM=1 npm run build:dataset   # full build (guarded; ~5.6k credits, resumabl
 - **Nansen drives the logic, not the decoration.** Four endpoints do the work: `tgm/historical-token-flow-summary` (the signal), `tgm/historical-token-ohlcv` (the outcome), `token-screener` (the universe), and `tgm/who-bought-sold` (the wallet identities in each drill-down).
 - **Reproducible.** The disk cache makes a rebuild cost zero credits; delete `.cache/` and re-run to pay for a full rebuild from scratch. `npm run smoke` (~11 credits) confirms auth and endpoint shapes before any spend.
 - **Honest by design.** Presets are calibrated to show winners, losers, *and* noise — including a signal that underperforms holding. The method and its limits are stated in-app and below.
+- **Tested where it counts.** The backtest engine has a pure unit suite ([shared/backtest.test.ts](shared/backtest.test.ts)) that pins the invariants trust depends on: horizon filtering (no look-ahead leak), raw median vs winsorized mean, the equal-weight-basket equity curve and its drawdown, and that the receipts list always matches the aggregate count. `npm test` — green on every push via CI.
 
 ## Stack
 
-Vite · React 18 · TypeScript (strict) · Tailwind. The equity curve is hand-drawn SVG — no chart dependency. Offline scripts run on `tsx`.
+Vite · React 18 · TypeScript (strict) · Tailwind. The equity curve is hand-drawn SVG — no chart dependency. Offline scripts run on `tsx`; the engine is unit-tested with Vitest and gated by GitHub Actions CI.
 
 ## Limits
 
