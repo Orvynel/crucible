@@ -155,7 +155,7 @@ export function Landing({ dataset, onEnter }: { dataset: Dataset; onEnter: () =>
             </span>
           </div>
           <p className="text-[11.5px] text-faint">
-            Educational research, built on real Nansen data — not investment advice. Full walkthrough in our post.
+            Educational research built on real Nansen data — not investment advice. Full method walkthrough in our post.
           </p>
         </div>
       </motion.footer>

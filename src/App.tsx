@@ -226,30 +226,35 @@ function TopBar({ dataset }: { dataset: Dataset }) {
 function NansenBanner() {
   return (
     <div
-      className="mb-6 flex flex-col gap-3 rounded-[var(--radius)] border border-line bg-[var(--surface-1)] p-4 sm:flex-row sm:items-center sm:justify-between"
+      className="mb-6 overflow-hidden rounded-[var(--radius)] border border-line bg-[var(--surface-1)]"
       style={{ boxShadow: "var(--shadow-card)" }}
     >
-      <div className="flex items-start gap-3">
-        <span className="relative mt-1 flex h-2 w-2 shrink-0">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-        </span>
-        <div>
-          <div className="text-[13px] font-bold text-text">Built on real Nansen data</div>
-          <p className="mt-0.5 max-w-2xl text-[12px] leading-snug text-muted">
-            Every verdict, price, and wallet below is computed from Nansen Smart Money cohort net-flows, measured
-            point-in-time. A backtest like this simply isn't possible without labelled, historical onchain flows — that
-            is what makes the data remarkable, and what Crucible is built to prove. Hover any{" "}
-            <span className="inline-grid h-3.5 w-3.5 place-items-center rounded-full border border-line bg-white text-[9px] font-bold text-faint">
-              ?
-            </span>{" "}
-            for a plain-English note.
-          </p>
+      <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-start gap-3">
+          <span className="relative mt-1 flex h-2 w-2 shrink-0">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+          </span>
+          <div>
+            <div className="text-[13px] font-bold text-text">Built on Nansen point-in-time data</div>
+            <p className="mt-0.5 max-w-2xl text-[12px] leading-snug text-muted">
+              Every verdict, price, and wallet on this page is derived from Nansen Smart Money cohort net-flows,
+              captured at each historical decision date — the labelled, point-in-time onchain data a no-look-ahead
+              backtest depends on.
+            </p>
+          </div>
         </div>
+        <span className="shrink-0 self-start rounded-full border border-line bg-[var(--surface-2)] px-3 py-1 text-[11px] font-semibold text-faint sm:self-center">
+          Powered by Nansen
+        </span>
       </div>
-      <span className="shrink-0 self-start rounded-full border border-line bg-[var(--surface-2)] px-3 py-1 text-[11px] font-semibold text-faint sm:self-center">
-        Educational research · not investment advice
-      </span>
+      <div className="flex items-start gap-2 border-t border-line bg-[var(--surface-2)] px-4 py-2.5 text-[11.5px] leading-snug text-muted">
+        <span className="mt-[1px] shrink-0 font-bold text-text">Not investment advice.</span>
+        <span>
+          Crucible is a research tool for studying whether historical Smart Money flows preceded price moves. Nothing
+          here is a recommendation to buy, sell, or hold any asset, and past behaviour does not predict future returns.
+        </span>
+      </div>
     </div>
   );
 }
@@ -266,12 +271,6 @@ function SectionHead({ title, hint }: { title: string; hint: string }) {
 function MethodFooter({ dataset }: { dataset: Dataset }) {
   return (
     <footer className="mt-7 grid gap-4 border-t border-line pt-6 text-xs leading-relaxed text-faint md:grid-cols-2">
-      <p className="rounded-xl border border-line bg-[var(--surface-2)] px-4 py-3 text-[12px] text-muted md:col-span-2">
-        <strong className="font-bold text-text">Not investment advice.</strong> Crucible is an educational research
-        tool, built on Nansen data, that studies whether onchain Smart Money flows have historically preceded price
-        moves. Nothing here is a recommendation to buy, sell, or hold any asset, and past behaviour does not predict
-        future returns.
-      </p>
       <p>
         <strong className="font-semibold text-muted">Method.</strong> Each scenario pairs a cohort net-flow signal over
         the {dataset.flow_window_days} days ending on a decision date with the forward price move measured strictly
