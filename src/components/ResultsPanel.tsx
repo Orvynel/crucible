@@ -6,6 +6,61 @@ import { describeRule } from "../lib/presets";
 import { EquityChart } from "./EquityChart";
 import { Hint } from "./Hint";
 
+// Small stroke glyphs give each metric a colored identity, so the grid reads as
+// a designed dashboard rather than a wall of white boxes. 18px, color inherited
+// from the chip behind them.
+const ICON: Record<string, ReactNode> = {
+  hit: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
+      <circle cx="12" cy="12" r="8.5" />
+      <circle cx="12" cy="12" r="3.2" />
+    </svg>
+  ),
+  median: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
+      <path d="M3 12h3l3-7 5 15 3-8h4" />
+    </svg>
+  ),
+  trades: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
+      <path d="M12 3.2l8.5 4.8-8.5 4.8L3.5 8z" />
+      <path d="M3.5 12.5l8.5 4.8 8.5-4.8" />
+    </svg>
+  ),
+  coverage: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 12V3.5a8.5 8.5 0 0 1 7.4 4.3z" fill="currentColor" stroke="none" />
+    </svg>
+  ),
+  drawdown: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
+      <path d="M3 7l6 6 4-4 8 8" />
+      <path d="M21 15v4h-4" />
+    </svg>
+  ),
+  baseline: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
+      <path d="M6 4v16" />
+      <path d="M6 5h10.5l-2.4 3.4L16.5 12H6" />
+    </svg>
+  ),
+};
+// Each KPI tints by its own sign (mint = edge, rose = fade, violet = noise); the
+// four supporting stats each own a calm hue so no two cards look alike.
+const KPI_TINT: Record<string, { bg: string; fg: string; chip: string }> = {
+  pos: { bg: "linear-gradient(155deg, var(--pos-soft), #ffffff 72%)", fg: "var(--pos)", chip: "rgba(21,157,99,0.16)" },
+  neg: { bg: "linear-gradient(155deg, var(--neg-soft), #ffffff 72%)", fg: "var(--neg)", chip: "rgba(224,75,102,0.15)" },
+  muted: { bg: "linear-gradient(155deg, var(--accent-soft), #ffffff 72%)", fg: "var(--accent)", chip: "rgba(91,99,232,0.15)" },
+};
+const STAT_PALETTE: Record<string, { bg: string; fg: string; chip: string; border: string }> = {
+  violet: { bg: "linear-gradient(160deg, var(--tint-violet), #ffffff 80%)", fg: "var(--accent)", chip: "rgba(91,99,232,0.14)", border: "rgba(91,99,232,0.22)" },
+  indigo: { bg: "linear-gradient(160deg, #e7ecfd, #ffffff 80%)", fg: "#3f57cf", chip: "rgba(63,87,207,0.13)", border: "rgba(63,87,207,0.2)" },
+  peach: { bg: "linear-gradient(160deg, var(--tint-peach), #ffffff 80%)", fg: "#c07d1c", chip: "rgba(192,125,28,0.15)", border: "rgba(192,125,28,0.22)" },
+  rose: { bg: "linear-gradient(160deg, var(--tint-blush), #ffffff 80%)", fg: "var(--neg)", chip: "rgba(224,75,102,0.13)", border: "rgba(224,75,102,0.2)" },
+};
+const toneOf = (x: number): "pos" | "neg" | "muted" => (x > 0 ? "pos" : x < 0 ? "neg" : "muted");
+
 // The verdict hero is a soft tinted card — its wash follows the tone (mint for
 // an edge, rose for a fade, violet for noise) so the answer reads at a glance
 // without shouting. Everything sits on the same warm light surface.
@@ -58,6 +113,8 @@ export function ResultsPanel({ r, label, rule }: { r: BacktestResult; label: str
         <div className="rise-2 col-span-12 grid gap-5 sm:grid-cols-2 xl:col-span-4 xl:grid-cols-1">
           <Kpi
             label="Hit rate"
+            tone={v.tone}
+            icon={ICON.hit}
             value={`${(r.hitRate * 100).toFixed(0)}%`}
             cls={signedClass(r.edgeHitRate)}
             sub={`vs ${(r.baselineHitRate * 100).toFixed(0)}% holding`}
@@ -73,6 +130,8 @@ export function ResultsPanel({ r, label, rule }: { r: BacktestResult; label: str
           />
           <Kpi
             label="Median return"
+            tone={toneOf(r.edgeMedianReturn)}
+            icon={ICON.median}
             value={pct(r.medianReturn)}
             cls={signedClass(r.edgeMedianReturn)}
             sub={`vs ${pct(r.baselineMedianReturn)} holding`}
@@ -105,15 +164,19 @@ export function ResultsPanel({ r, label, rule }: { r: BacktestResult; label: str
         </div>
 
         <div className="col-span-12 grid grid-cols-2 gap-5 xl:col-span-4">
-          <Stat label="Trades" value={`${r.n}`} sub={`of ${r.total} scenarios`} hint="How many point-in-time scenarios this signal actually fired on — the sample behind the verdict." />
+          <Stat label="Trades" color="violet" icon={ICON.trades} value={`${r.n}`} sub={`of ${r.total} scenarios`} hint="How many point-in-time scenarios this signal actually fired on — the sample behind the verdict." />
           <Stat
             label="Coverage"
+            color="indigo"
+            icon={ICON.coverage}
             value={`${(r.coverage * 100).toFixed(0)}%`}
             sub="scenarios that fired"
             hint="Share of all scenarios where the rule's condition was met. Low coverage means a rare, selective signal."
           />
           <Stat
             label="Max drawdown"
+            color="rose"
+            icon={ICON.drawdown}
             value={pct(r.maxDrawdown)}
             cls={signedClass(r.maxDrawdown)}
             sub="peak to trough"
@@ -121,6 +184,8 @@ export function ResultsPanel({ r, label, rule }: { r: BacktestResult; label: str
           />
           <Stat
             label="Baseline hit"
+            color="peach"
+            icon={ICON.baseline}
             value={`${(r.baselineHitRate * 100).toFixed(0)}%`}
             sub="always-in reference"
             hint="How often price was higher if you simply held every scenario, ignoring the signal. The bar the edge is measured against."
@@ -139,6 +204,8 @@ function Kpi({
   delta,
   deltaCls,
   hint,
+  tone,
+  icon,
 }: {
   label: string;
   value: string;
@@ -147,39 +214,75 @@ function Kpi({
   delta?: string;
   deltaCls?: string;
   hint?: ReactNode;
+  tone: "pos" | "neg" | "muted";
+  icon: ReactNode;
 }) {
+  const t = KPI_TINT[tone];
   return (
-    <div className="card flex flex-col justify-between p-5 transition-shadow duration-200 hover:shadow-[var(--shadow-lift)]">
+    <div
+      className="relative flex flex-col justify-between overflow-hidden rounded-[var(--radius)] border border-line p-5 transition-shadow duration-200 hover:shadow-[var(--shadow-lift)]"
+      style={{ background: t.bg, boxShadow: "var(--shadow-card)" }}
+    >
       <div className="flex items-center justify-between">
-        <span className="kicker inline-flex items-center gap-1.5">
-          {label}
-          {hint && <Hint>{hint}</Hint>}
+        <span className="inline-flex items-center gap-2">
+          <span className="grid h-8 w-8 place-items-center rounded-xl" style={{ background: t.chip, color: t.fg }}>
+            {icon}
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-[13.5px] font-bold text-text">
+            {label}
+            {hint && <Hint>{hint}</Hint>}
+          </span>
         </span>
         {delta && (
           <span
-            className={`nums rounded-full bg-[var(--surface-2)] px-2.5 py-0.5 text-[11.5px] font-bold tabular-nums ${deltaCls ?? "text-muted"}`}
+            className={`nums rounded-full bg-white/70 px-2.5 py-1 text-[12px] font-extrabold tabular-nums ${deltaCls ?? "text-muted"}`}
           >
             {delta}
           </span>
         )}
       </div>
-      <div className={`nums mt-4 text-[34px] font-extrabold leading-none tracking-tight tabular-nums ${cls ?? "text-text"}`}>
+      <div className={`nums mt-4 text-[40px] font-extrabold leading-none tracking-tight tabular-nums ${cls ?? "text-text"}`}>
         {value}
       </div>
-      <div className="mt-1.5 text-[12.5px] text-faint">{sub}</div>
+      <div className="mt-2 text-[13px] font-semibold text-muted">{sub}</div>
     </div>
   );
 }
 
-function Stat({ label, value, cls, sub, hint }: { label: string; value: string; cls?: string; sub?: string; hint?: ReactNode }) {
+function Stat({
+  label,
+  value,
+  cls,
+  sub,
+  hint,
+  color,
+  icon,
+}: {
+  label: string;
+  value: string;
+  cls?: string;
+  sub?: string;
+  hint?: ReactNode;
+  color: "violet" | "indigo" | "peach" | "rose";
+  icon: ReactNode;
+}) {
+  const p = STAT_PALETTE[color];
   return (
-    <div className="rounded-[var(--radius-sm)] border border-line bg-[var(--surface-2)] px-4 py-[18px] transition-colors duration-200 hover:border-[var(--line-strong)]">
-      <div className="kicker inline-flex items-center gap-1.5">
-        {label}
-        {hint && <Hint>{hint}</Hint>}
+    <div
+      className="rounded-[var(--radius-sm)] border px-4 py-[18px] transition-shadow duration-200 hover:shadow-[var(--shadow-card)]"
+      style={{ background: p.bg, borderColor: p.border }}
+    >
+      <div className="flex items-center gap-2">
+        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg" style={{ background: p.chip, color: p.fg }}>
+          {icon}
+        </span>
+        <span className="inline-flex items-center gap-1.5 text-[12.5px] font-bold text-text">
+          {label}
+          {hint && <Hint>{hint}</Hint>}
+        </span>
       </div>
-      <div className={`nums mt-2 text-[26px] font-bold leading-none tabular-nums ${cls ?? "text-text"}`}>{value}</div>
-      {sub && <div className="mt-1.5 text-[11.5px] text-faint">{sub}</div>}
+      <div className={`nums mt-3 text-[30px] font-extrabold leading-none tabular-nums ${cls ?? "text-text"}`}>{value}</div>
+      {sub && <div className="mt-1.5 text-[12px] font-medium text-muted">{sub}</div>}
     </div>
   );
 }
