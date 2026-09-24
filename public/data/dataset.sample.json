@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "built_at": "2026-09-23T15:53:04.521Z",
+  "built_at": "2026-09-24T17:25:57.056Z",
   "horizons": [
     1,
     3,
@@ -12,8 +12,8 @@
   "tokens": [
     {
       "chain": "ethereum",
-      "token_address": "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e",
-      "symbol": "CRVUSD"
+      "token_address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+      "symbol": "LINK"
     },
     {
       "chain": "base",
@@ -22,234 +22,270 @@
     },
     {
       "chain": "solana",
-      "token_address": "USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB",
-      "symbol": "USD1"
+      "token_address": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+      "symbol": "PUMP"
     }
   ],
   "scenarios": [
     {
-      "id": "ethereum:CRVUSD:2026-02-01",
+      "id": "ethereum:LINK:2026-02-01",
       "token": {
         "chain": "ethereum",
-        "token_address": "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e",
-        "symbol": "CRVUSD"
+        "token_address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+        "symbol": "LINK"
       },
       "as_of": "2026-02-01",
       "signal": {
         "smart_trader": {
-          "net_flow_usd": 503333.8209620097,
-          "avg_flow_usd": 503333.82104861306,
+          "net_flow_usd": 3747.790966701985,
+          "avg_flow_usd": 3747.7909676441095,
           "wallet_count": 2
         },
         "whale": {
-          "net_flow_usd": 4902238.335290117,
-          "avg_flow_usd": 4401946.408047087,
-          "wallet_count": 10
+          "net_flow_usd": -3855137.4549079835,
+          "avg_flow_usd": 1677517.4968010604,
+          "wallet_count": 12
         },
         "top_pnl": {
-          "net_flow_usd": 13438347.52910478,
-          "avg_flow_usd": 6361785.855699429,
-          "wallet_count": 30
+          "net_flow_usd": -14739698.29630661,
+          "avg_flow_usd": 8725168.408714501,
+          "wallet_count": 35
         },
         "public_figure": {
-          "net_flow_usd": 511598.9340012312,
-          "avg_flow_usd": 64296.38644787378,
-          "wallet_count": 4
+          "net_flow_usd": -4807.497156678724,
+          "avg_flow_usd": 4807.49715316867,
+          "wallet_count": 2
         },
         "exchange": {
-          "net_flow_usd": -33020983.80847689,
-          "avg_flow_usd": 8733966.85694221,
+          "net_flow_usd": 38311120.13299474,
+          "avg_flow_usd": 20685209.26261892,
           "wallet_count": 0
         },
         "fresh_wallets": {
-          "net_flow_usd": 9411998.982710544,
-          "avg_flow_usd": 3064831.346294541,
+          "net_flow_usd": 9893800.499452433,
+          "avg_flow_usd": 6179449.785703162,
           "wallet_count": 0
         }
       },
-      "price_at_as_of": 0.9920619368064375,
+      "price_at_as_of": 9.438788648548849,
       "outcome": {
         "forward_return": {
-          "1": 0.0047152706230122465,
-          "3": 0.002216996123680204,
-          "7": 0.007164520632087834,
-          "14": 0.0045209267503973916,
-          "30": 0.006661948195446632
+          "1": 0.039740885494732314,
+          "3": -0.01714537851880582,
+          "7": -0.06342083714727975,
+          "14": -0.07014958844812336,
+          "30": -0.06591837435630854
         },
-        "max_drawdown": -0.018712031135215135
+        "max_drawdown": -0.21451743562961245
       },
       "provenance": {
         "flow_window_days": 7,
-        "fetched_at": "2026-09-23T15:52:32.553Z"
-      }
+        "fetched_at": "2026-09-24T17:25:38.342Z"
+      },
+      "top_wallets": [
+        {
+          "address": "0xcfaba3994c45aa03e479000300801ae35b39c388",
+          "label": "🤓 30D Smart Trader [0xcfaba3]",
+          "side": "buy",
+          "volume_usd": 90301.37465131098
+        },
+        {
+          "address": "0x6621e986de89f5e3ae641680fd702fae1e997e1b",
+          "label": "🤓 30D Smart Trader [0x6621e9]",
+          "side": "buy",
+          "volume_usd": 4980.968562420755
+        },
+        {
+          "address": "0x36485e0b0f5a1d0e2d8bff830987ef0464ecfb0e",
+          "label": "👤 Griffin Cock Foster [0x36485e]",
+          "side": "buy",
+          "volume_usd": 13.491095674534026
+        }
+      ]
     },
     {
-      "id": "ethereum:CRVUSD:2026-04-02",
+      "id": "ethereum:LINK:2026-04-02",
       "token": {
         "chain": "ethereum",
-        "token_address": "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e",
-        "symbol": "CRVUSD"
+        "token_address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+        "symbol": "LINK"
       },
       "as_of": "2026-04-02",
       "signal": {
         "smart_trader": {
-          "net_flow_usd": 0,
-          "avg_flow_usd": 516.7261342626679,
-          "wallet_count": 0
+          "net_flow_usd": -565.1514878014059,
+          "avg_flow_usd": 565.1514878599728,
+          "wallet_count": 1
         },
         "whale": {
-          "net_flow_usd": -12177.84218187793,
-          "avg_flow_usd": 7128.914785182038,
-          "wallet_count": 2
+          "net_flow_usd": -119975.2087105448,
+          "avg_flow_usd": 237312.52188212215,
+          "wallet_count": 1
         },
         "top_pnl": {
-          "net_flow_usd": -9441461.583048992,
-          "avg_flow_usd": 2101200.5283714933,
-          "wallet_count": 14
+          "net_flow_usd": 35229.94862685265,
+          "avg_flow_usd": 227428.83965817175,
+          "wallet_count": 18
         },
         "public_figure": {
-          "net_flow_usd": -113062.26329401947,
-          "avg_flow_usd": 33924.66058774107,
-          "wallet_count": 4
+          "net_flow_usd": -84008.21820972464,
+          "avg_flow_usd": 84008.2182958742,
+          "wallet_count": 2
         },
         "exchange": {
-          "net_flow_usd": 9657765.101705639,
-          "avg_flow_usd": 3152071.5674179136,
+          "net_flow_usd": 11868054.335178796,
+          "avg_flow_usd": 11186588.932785515,
           "wallet_count": 0
         },
         "fresh_wallets": {
-          "net_flow_usd": 2811166.900422108,
-          "avg_flow_usd": 641396.1927475322,
+          "net_flow_usd": 925489.1630401176,
+          "avg_flow_usd": 866738.8794800236,
           "wallet_count": 0
         }
       },
-      "price_at_as_of": 0.9971108727898534,
+      "price_at_as_of": 8.620486740813531,
       "outcome": {
         "forward_return": {
-          "1": 0.0011526039242777397,
-          "3": 0.0022940249895904152,
-          "7": 0.003432092118789143,
-          "14": 0.002627246574314901,
-          "30": 0.002728694260212494
+          "1": 0.004922570770197199,
+          "3": 0.02183580251560735,
+          "7": 0.037506944859413194,
+          "14": 0.10982987118823662,
+          "30": 0.06433467038565244
         },
-        "max_drawdown": -0.004876507165252564
+        "max_drawdown": -0.015581510416884159
       },
       "provenance": {
         "flow_window_days": 7,
-        "fetched_at": "2026-09-23T15:52:34.003Z"
+        "fetched_at": "2026-09-24T17:25:40.602Z"
       }
     },
     {
-      "id": "ethereum:CRVUSD:2026-06-01",
+      "id": "ethereum:LINK:2026-06-01",
       "token": {
         "chain": "ethereum",
-        "token_address": "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e",
-        "symbol": "CRVUSD"
+        "token_address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+        "symbol": "LINK"
       },
       "as_of": "2026-06-01",
       "signal": {
         "smart_trader": {
+          "net_flow_usd": -9338.128152707679,
+          "avg_flow_usd": 9631.347464721488,
+          "wallet_count": 1
+        },
+        "whale": {
+          "net_flow_usd": 58092.6325852072,
+          "avg_flow_usd": 347798.4535235285,
+          "wallet_count": 4
+        },
+        "top_pnl": {
+          "net_flow_usd": 5383.317316857108,
+          "avg_flow_usd": 87270.75451468783,
+          "wallet_count": 14
+        },
+        "public_figure": {
           "net_flow_usd": 0,
           "avg_flow_usd": 0,
           "wallet_count": 0
         },
-        "whale": {
-          "net_flow_usd": -24837.042386655372,
-          "avg_flow_usd": 192473.96765574938,
-          "wallet_count": 7
-        },
-        "top_pnl": {
-          "net_flow_usd": -10238960.623852542,
-          "avg_flow_usd": 4836157.266848138,
-          "wallet_count": 11
-        },
-        "public_figure": {
-          "net_flow_usd": -12675.54065004363,
-          "avg_flow_usd": 12813.558874550266,
-          "wallet_count": 3
-        },
         "exchange": {
-          "net_flow_usd": 21855993.85108736,
-          "avg_flow_usd": 4693087.598115515,
+          "net_flow_usd": 10421917.081379434,
+          "avg_flow_usd": 6778290.783371018,
           "wallet_count": 0
         },
         "fresh_wallets": {
-          "net_flow_usd": 1083518881.141448,
-          "avg_flow_usd": 1720969831.5310125,
+          "net_flow_usd": 2242982.1034045704,
+          "avg_flow_usd": 2060575.933911962,
           "wallet_count": 0
         }
       },
-      "price_at_as_of": 0.998273731913744,
+      "price_at_as_of": 9.041722231722341,
       "outcome": {
         "forward_return": {
-          "1": 0.00046547142840958067,
-          "3": 0.00048028482046413856,
-          "7": 0.00107756323906405,
-          "14": 0.0012181426956445751,
-          "30": 0.0008183144517481811
+          "1": -0.07652628785727467,
+          "3": -0.11531750665309637,
+          "7": -0.11675966904250201,
+          "14": -0.08324140121436707,
+          "30": -0.18697459878842948
         },
-        "max_drawdown": -0.003086104298127945
+        "max_drawdown": -0.22231720077361228
       },
       "provenance": {
         "flow_window_days": 7,
-        "fetched_at": "2026-09-23T15:52:35.384Z"
-      }
+        "fetched_at": "2026-09-24T17:25:41.677Z"
+      },
+      "top_wallets": [
+        {
+          "address": "0x6621e986de89f5e3ae641680fd702fae1e997e1b",
+          "label": "🤓 30D Smart Trader [0x6621e9]",
+          "side": "buy",
+          "volume_usd": 9993.801895382907
+        }
+      ]
     },
     {
-      "id": "ethereum:CRVUSD:2026-07-31",
+      "id": "ethereum:LINK:2026-07-31",
       "token": {
         "chain": "ethereum",
-        "token_address": "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e",
-        "symbol": "CRVUSD"
+        "token_address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+        "symbol": "LINK"
       },
       "as_of": "2026-07-31",
       "signal": {
         "smart_trader": {
-          "net_flow_usd": 0,
-          "avg_flow_usd": 0,
-          "wallet_count": 0
+          "net_flow_usd": -513.9493267571781,
+          "avg_flow_usd": 775.8270769815557,
+          "wallet_count": 2
         },
         "whale": {
-          "net_flow_usd": -6055.434198267259,
-          "avg_flow_usd": 10015.22316931412,
+          "net_flow_usd": 82594.492997411,
+          "avg_flow_usd": 82594.49308309433,
           "wallet_count": 1
         },
         "top_pnl": {
-          "net_flow_usd": 38276.335560470994,
-          "avg_flow_usd": 155035.62496661945,
-          "wallet_count": 6
+          "net_flow_usd": -287186.8574747326,
+          "avg_flow_usd": 116300.490411567,
+          "wallet_count": 13
         },
         "public_figure": {
-          "net_flow_usd": -8025.383083368286,
-          "avg_flow_usd": 17015.015481779134,
-          "wallet_count": 1
+          "net_flow_usd": 0,
+          "avg_flow_usd": 71.94249707883563,
+          "wallet_count": 0
         },
         "exchange": {
-          "net_flow_usd": 2845081.6957453643,
-          "avg_flow_usd": 1190283.7223858777,
+          "net_flow_usd": -32861997.93818348,
+          "avg_flow_usd": 39041605.871073954,
           "wallet_count": 0
         },
         "fresh_wallets": {
-          "net_flow_usd": 4262671.655368364,
-          "avg_flow_usd": 453891.80529163394,
+          "net_flow_usd": 8117028.924790629,
+          "avg_flow_usd": 1731329.2565756957,
           "wallet_count": 0
         }
       },
-      "price_at_as_of": 0.9989971274473174,
+      "price_at_as_of": 8.15921585553386,
       "outcome": {
         "forward_return": {
-          "1": 0.0001462612933309515,
-          "3": 0.00008251728465724639,
-          "7": 0.0003525405793365355,
-          "14": 0.000835858653674304,
-          "30": 0.00039691471570568737
+          "1": -0.012733541875651011,
+          "3": 0.00123030049256867,
+          "7": 0.0021807113629479513,
+          "14": 0.10258597780727197,
+          "30": 0.36012803529294324
         },
-        "max_drawdown": -0.02515366949778397
+        "max_drawdown": -0.03111012539052449
       },
       "provenance": {
         "flow_window_days": 7,
-        "fetched_at": "2026-09-23T15:52:36.150Z"
-      }
+        "fetched_at": "2026-09-24T17:25:42.856Z"
+      },
+      "top_wallets": [
+        {
+          "address": "0xe736bfb1029ec9e60d18be0148487dd277022ca2",
+          "label": "🔧 recv.eth [0xe736bf]",
+          "side": "buy",
+          "volume_usd": 84327.00383926106
+        }
+      ]
     },
     {
       "id": "base:WETH:2026-02-01",
@@ -304,8 +340,40 @@
       },
       "provenance": {
         "flow_window_days": 7,
-        "fetched_at": "2026-09-23T15:52:42.810Z"
-      }
+        "fetched_at": "2026-09-24T17:25:43.734Z"
+      },
+      "top_wallets": [
+        {
+          "address": "0x7ad3c2303655f78594e4f976ddb873aef9322efc",
+          "label": "🔧 👤 Crypto Ninja [0x7ad3c2]",
+          "side": "buy",
+          "volume_usd": 50018.17437160473
+        },
+        {
+          "address": "0xa1d198d8803a99fa5afa12362655857b23f93499",
+          "label": "👤 Miyamoto [0xa1d198]",
+          "side": "buy",
+          "volume_usd": 24957.75222778034
+        },
+        {
+          "address": "0x8915ea6d081b68f80004c579a518fb645db71afa",
+          "label": "👤 DickeyDees [0x8915ea]",
+          "side": "buy",
+          "volume_usd": 20060.513600248807
+        },
+        {
+          "address": "0x049c48d6e1619cc9aad5005aa3508a33b4f4a114",
+          "label": "🤓 \"MoneyChanger\" on OpenSea [0x049c48]",
+          "side": "buy",
+          "volume_usd": 13928.13494301683
+        },
+        {
+          "address": "0xa2aeb0cadc27bdd6a6656390c2d05f6e7cbed497",
+          "label": "👤 👀 vein [0xa2aeb0]",
+          "side": "buy",
+          "volume_usd": 10383.729388007296
+        }
+      ]
     },
     {
       "id": "base:WETH:2026-04-02",
@@ -360,8 +428,28 @@
       },
       "provenance": {
         "flow_window_days": 7,
-        "fetched_at": "2026-09-23T15:52:46.445Z"
-      }
+        "fetched_at": "2026-09-24T17:25:45.645Z"
+      },
+      "top_wallets": [
+        {
+          "address": "0xda905450166c6574cee0cd276b898f62d7368ee9",
+          "label": "Top 100 on WETH Leaderboard [0xda9054]",
+          "side": "buy",
+          "volume_usd": 4614.889732343485
+        },
+        {
+          "address": "0xb3397a6feedff2b9fce9ca1086cb1bdd617c16bf",
+          "label": "👤 Kristoph Galland [0xb3397a]",
+          "side": "buy",
+          "volume_usd": 316.8429644742094
+        },
+        {
+          "address": "0x612c45551195f15bf05d722b9f137c914b077fc7",
+          "label": "👤 sam [0x612c45]",
+          "side": "buy",
+          "volume_usd": 34.23778755858668
+        }
+      ]
     },
     {
       "id": "base:WETH:2026-06-01",
@@ -416,8 +504,40 @@
       },
       "provenance": {
         "flow_window_days": 7,
-        "fetched_at": "2026-09-23T15:52:49.330Z"
-      }
+        "fetched_at": "2026-09-24T17:25:47.944Z"
+      },
+      "top_wallets": [
+        {
+          "address": "0xcfaba3994c45aa03e479000300801ae35b39c388",
+          "label": "🤓 30D Smart Trader [0xcfaba3]",
+          "side": "buy",
+          "volume_usd": 30102.357397582084
+        },
+        {
+          "address": "0xa1c9d41719c4ffd99463f1cfa579d9b6a96b50c6",
+          "label": "👤 uga2vegas [0xa1c9d4]",
+          "side": "buy",
+          "volume_usd": 4017.375429831261
+        },
+        {
+          "address": "0x4ac979e8c7f6a86cb6363c2d8e737a0f15f3cc3c",
+          "label": "🤓 30D Smart Trader [0x4ac979]",
+          "side": "buy",
+          "volume_usd": 1662.056818922022
+        },
+        {
+          "address": "0xc9cbbff13a2056de78c31019e519e3cae09857a5",
+          "label": "👤 👀 Henrique [0xc9cbbf]",
+          "side": "buy",
+          "volume_usd": 1198.31514254053
+        },
+        {
+          "address": "0x9cf5dec27768855d478152128851ebde74f6a3ed",
+          "label": "🤓 alectrautilities.eth [0x9cf5de]",
+          "side": "buy",
+          "volume_usd": 1112.3834807310427
+        }
+      ]
     },
     {
       "id": "base:WETH:2026-07-31",
@@ -472,237 +592,391 @@
       },
       "provenance": {
         "flow_window_days": 7,
-        "fetched_at": "2026-09-23T15:52:52.498Z"
-      }
+        "fetched_at": "2026-09-24T17:25:50.328Z"
+      },
+      "top_wallets": [
+        {
+          "address": "0x46a83dc1a264bff133db887023d2884167094837",
+          "label": "🤓 30D Smart Trader [0x46a83d]",
+          "side": "buy",
+          "volume_usd": 951870.8295242591
+        },
+        {
+          "address": "0xf6e0b11f4fcbce85504fd04dd9adc6a8a02ad90d",
+          "label": "🤓 180D Smart Trader [0xf6e0b1]",
+          "side": "buy",
+          "volume_usd": 8494.810108437698
+        },
+        {
+          "address": "0xbf26925f736e90e1715ce4e04cd9c289dd1bc002",
+          "label": "👤 denz [0xbf2692]",
+          "side": "buy",
+          "volume_usd": 382.133251489474
+        },
+        {
+          "address": "0x12942981af3c5e5e6003a46607b4560e6589146e",
+          "label": "👤 Ser Boksalot [0x129429]",
+          "side": "buy",
+          "volume_usd": 184.51185926684425
+        }
+      ]
     },
     {
-      "id": "solana:USD1:2026-02-01",
+      "id": "solana:PUMP:2026-02-01",
       "token": {
         "chain": "solana",
-        "token_address": "USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB",
-        "symbol": "USD1"
+        "token_address": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "symbol": "PUMP"
       },
       "as_of": "2026-02-01",
       "signal": {
         "smart_trader": {
-          "net_flow_usd": -612.825380077541,
-          "avg_flow_usd": 1330.4262573833198,
+          "net_flow_usd": -35353.66387969756,
+          "avg_flow_usd": 38413.38754036848,
           "wallet_count": 3
         },
         "whale": {
-          "net_flow_usd": 1114694.338875105,
-          "avg_flow_usd": 1755096.0862611425,
-          "wallet_count": 23
+          "net_flow_usd": -6005757.5799529385,
+          "avg_flow_usd": 3132859.201851886,
+          "wallet_count": 67
         },
         "top_pnl": {
-          "net_flow_usd": 534279.0011374005,
-          "avg_flow_usd": 588419.1767734794,
-          "wallet_count": 20
+          "net_flow_usd": -2897593.924942463,
+          "avg_flow_usd": 2324685.5354757123,
+          "wallet_count": 65
         },
         "public_figure": {
-          "net_flow_usd": -86106.225413583,
-          "avg_flow_usd": 72959.25333808022,
-          "wallet_count": 12
+          "net_flow_usd": 18136.47549919989,
+          "avg_flow_usd": 18136.47550038877,
+          "wallet_count": 6
         },
         "exchange": {
-          "net_flow_usd": 228915738.4981634,
-          "avg_flow_usd": 248205634.0400085,
+          "net_flow_usd": 1796094.3985923722,
+          "avg_flow_usd": 3231776.437583695,
           "wallet_count": 0
         },
         "fresh_wallets": {
-          "net_flow_usd": 279523907.8612726,
-          "avg_flow_usd": 119955493.64164999,
+          "net_flow_usd": 2363631.650552086,
+          "avg_flow_usd": 4559470.511120654,
           "wallet_count": 0
         }
       },
-      "price_at_as_of": 0.9989992903659519,
+      "price_at_as_of": 0.0025664322306055485,
       "outcome": {
         "forward_return": {
-          "1": 0.0009255548524855772,
-          "3": 0.00043484115187286676,
-          "7": 0.0019914511025134196,
-          "14": 0.0005255248538584834,
-          "30": 0.0005366527545778155
+          "1": -0.06278024712393626,
+          "3": -0.11486960638423216,
+          "7": -0.1820065054470238,
+          "14": -0.14364319957787752,
+          "30": -0.249870991951183
         },
-        "max_drawdown": -0.004473099006221726
+        "max_drawdown": -0.3428293943374944
       },
       "provenance": {
         "flow_window_days": 7,
-        "fetched_at": "2026-09-23T15:52:58.255Z"
-      }
+        "fetched_at": "2026-09-24T17:25:52.128Z"
+      },
+      "top_wallets": [
+        {
+          "address": "4AFAkCSkSNmra64irggEFd8ZtF4WCtFe51qVaFFNBL2D",
+          "label": "🤖 High Balance [4AFAkCSk]",
+          "side": "buy",
+          "volume_usd": 628457.4321025292
+        },
+        {
+          "address": "GJvewfRjqTUPtx6WsBSUnaFbdgXwgXnWfpDyLm65T4YA",
+          "label": "SOL Millionaire [GJvewfRj]",
+          "side": "buy",
+          "volume_usd": 489739.6780003125
+        },
+        {
+          "address": "Fe8z9Th1t175gScoy2TFP8ZGB6ahVvNEwPnmRmDJDMby",
+          "label": "Top 100 on PUMP Leaderboard [Fe8z9Th1]",
+          "side": "buy",
+          "volume_usd": 279333.68654201936
+        },
+        {
+          "address": "6bxz5E93NJBXqubkT72nLzkkz9j2PMBbfPKi6qxGYXdW",
+          "label": "🔧 👤 👀 Shill Capital [6bxz5E93]",
+          "side": "sell",
+          "volume_usd": 203685.80319808197
+        },
+        {
+          "address": "9SMp4yLKGtW9TnLimfVPkDARsyNSfJw43WMke4r7KoZj",
+          "label": "🤖 Token Millionaire [9SMp4yLK]",
+          "side": "buy",
+          "volume_usd": 77708.61940686649
+        }
+      ]
     },
     {
-      "id": "solana:USD1:2026-04-02",
+      "id": "solana:PUMP:2026-04-02",
       "token": {
         "chain": "solana",
-        "token_address": "USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB",
-        "symbol": "USD1"
+        "token_address": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "symbol": "PUMP"
       },
       "as_of": "2026-04-02",
       "signal": {
         "smart_trader": {
-          "net_flow_usd": 0,
-          "avg_flow_usd": 0,
-          "wallet_count": 0
-        },
-        "whale": {
-          "net_flow_usd": -313573.2673194394,
-          "avg_flow_usd": 559699.0170880452,
-          "wallet_count": 4
-        },
-        "top_pnl": {
-          "net_flow_usd": 84777.23547916827,
-          "avg_flow_usd": 292188.71343741927,
-          "wallet_count": 4
-        },
-        "public_figure": {
-          "net_flow_usd": -721.2434078168715,
-          "avg_flow_usd": 463.83701862099883,
+          "net_flow_usd": 648557.6663459572,
+          "avg_flow_usd": 687338.8364276084,
           "wallet_count": 2
         },
+        "whale": {
+          "net_flow_usd": -1357092.2521884367,
+          "avg_flow_usd": 1228558.9838285716,
+          "wallet_count": 14
+        },
+        "top_pnl": {
+          "net_flow_usd": -288377.55305222946,
+          "avg_flow_usd": 1140044.9077921945,
+          "wallet_count": 14
+        },
+        "public_figure": {
+          "net_flow_usd": -760.988860997586,
+          "avg_flow_usd": 760.9888611616959,
+          "wallet_count": 3
+        },
         "exchange": {
-          "net_flow_usd": 21541441.653041624,
-          "avg_flow_usd": 18987997.928013783,
+          "net_flow_usd": -2529511.089413077,
+          "avg_flow_usd": 2318655.626107211,
           "wallet_count": 0
         },
         "fresh_wallets": {
-          "net_flow_usd": 40662437.97651162,
-          "avg_flow_usd": 48753999.56352011,
+          "net_flow_usd": 1029147.1087492019,
+          "avg_flow_usd": 950107.0405140992,
           "wallet_count": 0
         }
       },
-      "price_at_as_of": 0.9996273188197716,
+      "price_at_as_of": 0.0016309444682002189,
       "outcome": {
         "forward_return": {
-          "1": 0.00022935796658596352,
-          "3": -0.0002277135204397096,
-          "7": -0.0003384147763356715,
-          "14": 0.0007280560617142218,
-          "30": 0.00033005921980922004
+          "1": 0.010829925766159265,
+          "3": 0.0369921851594055,
+          "7": 0.10460493755125966,
+          "14": 0.23188409910625984,
+          "30": 0.11514571922917871
         },
-        "max_drawdown": -0.0014221838562425981
+        "max_drawdown": -0.0018929553637889729
       },
       "provenance": {
         "flow_window_days": 7,
-        "fetched_at": "2026-09-23T15:53:01.258Z"
-      }
+        "fetched_at": "2026-09-24T17:25:52.908Z"
+      },
+      "top_wallets": [
+        {
+          "address": "4AFAkCSkSNmra64irggEFd8ZtF4WCtFe51qVaFFNBL2D",
+          "label": "🤖 High Balance [4AFAkCSk]",
+          "side": "buy",
+          "volume_usd": 3318235.978184185
+        },
+        {
+          "address": "7XZ5NgVDYzRiW9SATXSwh2tga2mZbyTBA7VJ2VBVTv9s",
+          "label": "🤓 90D Smart Trader [7XZ5NgVD]",
+          "side": "buy",
+          "volume_usd": 55165.60678730713
+        },
+        {
+          "address": "GvQy1MRaMGQW3tx46Af8d5U9TAmnmYHt9aXy3TGrtR5T",
+          "label": "🤓 👤 Dean Krauss [GvQy1MRa]",
+          "side": "buy",
+          "volume_usd": 9953.852359013119
+        },
+        {
+          "address": "Fe8z9Th1t175gScoy2TFP8ZGB6ahVvNEwPnmRmDJDMby",
+          "label": "Top 100 on PUMP Leaderboard [Fe8z9Th1]",
+          "side": "buy",
+          "volume_usd": 3085.9192315951527
+        },
+        {
+          "address": "91d2qaa7DmqhALBcK2XBYrdo4oD1KeNsuRQfxYxYTS9S",
+          "label": "🤓 606906.sol [91d2qaa7]",
+          "side": "buy",
+          "volume_usd": 1348.759451705079
+        }
+      ]
     },
     {
-      "id": "solana:USD1:2026-06-01",
+      "id": "solana:PUMP:2026-06-01",
       "token": {
         "chain": "solana",
-        "token_address": "USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB",
-        "symbol": "USD1"
+        "token_address": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "symbol": "PUMP"
       },
       "as_of": "2026-06-01",
       "signal": {
         "smart_trader": {
-          "net_flow_usd": -185.59803056321928,
-          "avg_flow_usd": 185.59803031410632,
-          "wallet_count": 1
+          "net_flow_usd": -6553.8062635455735,
+          "avg_flow_usd": 1998.5728510712333,
+          "wallet_count": 3
         },
         "whale": {
-          "net_flow_usd": -490845.56897836324,
-          "avg_flow_usd": 793168.7705817868,
-          "wallet_count": 2
+          "net_flow_usd": -346762.50319995603,
+          "avg_flow_usd": 634550.2131795222,
+          "wallet_count": 15
         },
         "top_pnl": {
-          "net_flow_usd": 108068.73820597935,
-          "avg_flow_usd": 30009.879378812657,
-          "wallet_count": 4
+          "net_flow_usd": 1803470.2907093924,
+          "avg_flow_usd": 1777056.1442887334,
+          "wallet_count": 14
         },
         "public_figure": {
-          "net_flow_usd": -1161.1271704215612,
-          "avg_flow_usd": 245.1836877989913,
-          "wallet_count": 1
+          "net_flow_usd": -51005.22356801571,
+          "avg_flow_usd": 36141.354342748265,
+          "wallet_count": 4
         },
         "exchange": {
-          "net_flow_usd": -13487813.456876528,
-          "avg_flow_usd": 39761575.97121783,
+          "net_flow_usd": -3818350.9860060913,
+          "avg_flow_usd": 3658325.939282546,
           "wallet_count": 0
         },
         "fresh_wallets": {
-          "net_flow_usd": 3890767.2601699545,
-          "avg_flow_usd": 2391925.0351050626,
+          "net_flow_usd": 2424703.7748634545,
+          "avg_flow_usd": 1705719.2967004036,
           "wallet_count": 0
         }
       },
-      "price_at_as_of": 0.9985849175240359,
+      "price_at_as_of": 0.0018334103355353538,
       "outcome": {
         "forward_return": {
-          "1": -0.0003620960885419855,
-          "3": 0.00039686447420850257,
-          "7": 0.0003294881836086727,
-          "14": 0.0015330486614524297,
-          "30": 0.0001405035561721224
+          "1": -0.11026255338009872,
+          "3": -0.10075679384932323,
+          "7": -0.11519502929226488,
+          "14": -0.14990709572097582,
+          "30": -0.24360234548597204
         },
-        "max_drawdown": -0.001401227589169718
+        "max_drawdown": -0.3688812386064526
       },
       "provenance": {
         "flow_window_days": 7,
-        "fetched_at": "2026-09-23T15:53:02.825Z"
-      }
+        "fetched_at": "2026-09-24T17:25:54.014Z"
+      },
+      "top_wallets": [
+        {
+          "address": "GJvewfRjqTUPtx6WsBSUnaFbdgXwgXnWfpDyLm65T4YA",
+          "label": "SOL Millionaire [GJvewfRj]",
+          "side": "buy",
+          "volume_usd": 593670.9570644556
+        },
+        {
+          "address": "Ev1AaPu4c6L1QEXZiLv9DkNBa3ZigddiXYFTk9tN2DoK",
+          "label": "🤓 klu.eth* on Ethereum [Ev1AaPu4]",
+          "side": "buy",
+          "volume_usd": 106876.44956527464
+        },
+        {
+          "address": "FrhLfj81LRpMR3EwSSCGPzHmxsnoq8h628ne68vK5oMN",
+          "label": "High Balance [FrhLfj81]",
+          "side": "buy",
+          "volume_usd": 72315.9492397136
+        },
+        {
+          "address": "DvJu6FpTSDfSBh4CwhZ8rC2XgiNYZ17bwbeNxp3sLtuU",
+          "label": "👤 Chang [DvJu6FpT]",
+          "side": "buy",
+          "volume_usd": 21199.646751222408
+        },
+        {
+          "address": "Azk7B3EE5mFhPNBm6dMQ1LCqpnVDT2vL6sgyuCYEug3t",
+          "label": "🔧 Top 100 on JUPSOL Leaderboard [Azk7B3EE]",
+          "side": "buy",
+          "volume_usd": 19730.686095315894
+        }
+      ]
     },
     {
-      "id": "solana:USD1:2026-07-31",
+      "id": "solana:PUMP:2026-07-31",
       "token": {
         "chain": "solana",
-        "token_address": "USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB",
-        "symbol": "USD1"
+        "token_address": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+        "symbol": "PUMP"
       },
       "as_of": "2026-07-31",
       "signal": {
         "smart_trader": {
-          "net_flow_usd": 0,
-          "avg_flow_usd": 242181.80328094139,
-          "wallet_count": 0
-        },
-        "whale": {
-          "net_flow_usd": -1262.5969428165977,
-          "avg_flow_usd": 1262.5969433199436,
-          "wallet_count": 1
-        },
-        "top_pnl": {
-          "net_flow_usd": -2875.935267297031,
-          "avg_flow_usd": 14097.017657574228,
-          "wallet_count": 1
-        },
-        "public_figure": {
-          "net_flow_usd": -769.8106730361186,
-          "avg_flow_usd": 20438.939363701462,
+          "net_flow_usd": -2514.4772828735104,
+          "avg_flow_usd": 1909.0813268956088,
           "wallet_count": 4
         },
+        "whale": {
+          "net_flow_usd": -637428.0270042397,
+          "avg_flow_usd": 601431.3313538362,
+          "wallet_count": 13
+        },
+        "top_pnl": {
+          "net_flow_usd": 1986493.5078779839,
+          "avg_flow_usd": 1004256.5288484932,
+          "wallet_count": 16
+        },
+        "public_figure": {
+          "net_flow_usd": 232138.22283066864,
+          "avg_flow_usd": 207135.10665576597,
+          "wallet_count": 6
+        },
         "exchange": {
-          "net_flow_usd": 16743461.581448331,
-          "avg_flow_usd": 6399122.758679238,
+          "net_flow_usd": -3244113.9337884565,
+          "avg_flow_usd": 2097227.1616840307,
           "wallet_count": 0
         },
         "fresh_wallets": {
-          "net_flow_usd": 250330.8919191204,
-          "avg_flow_usd": 440003.0216105102,
+          "net_flow_usd": 20732951.579331044,
+          "avg_flow_usd": 2722927.6851879093,
           "wallet_count": 0
         }
       },
-      "price_at_as_of": 0.9989588022324186,
+      "price_at_as_of": 0.00206643941354854,
       "outcome": {
         "forward_return": {
-          "1": 0.00003766536187099767,
-          "3": 0.00009798235950730927,
-          "7": 0.0009311696034688399,
-          "14": -0.0016011001987117357,
-          "30": 0.0010483267494147963
+          "1": 0.022750363942358742,
+          "3": 0.03125372103350421,
+          "7": 0.09637357294518689,
+          "14": 0.3729056020117725,
+          "30": 1.1510785095756986
         },
-        "max_drawdown": -0.01081037139654295
+        "max_drawdown": -0.00976390938548255
       },
       "provenance": {
         "flow_window_days": 7,
-        "fetched_at": "2026-09-23T15:53:04.520Z"
-      }
+        "fetched_at": "2026-09-24T17:25:55.258Z"
+      },
+      "top_wallets": [
+        {
+          "address": "9atar2tWMhbPxeL8Ber7HaAe1MSRPgYX9nF9TkDuvYbd",
+          "label": "👤 👀 hdf [9atar2tW]",
+          "side": "buy",
+          "volume_usd": 309720.91747147124
+        },
+        {
+          "address": "8JKZAwiTJvkWL1ggjx787t5tcCgvahk4RYruoz4xnhXt",
+          "label": "🤓 180D Smart Trader [8JKZAwiT]",
+          "side": "buy",
+          "volume_usd": 252001.00495794567
+        },
+        {
+          "address": "GgG65z3MXpmGnV3ZapKv5ayDqox1x7CJnqP1LD8FaZdt",
+          "label": "🔧 👤 Y22 [GgG65z3M]",
+          "side": "buy",
+          "volume_usd": 149516.75702359155
+        },
+        {
+          "address": "2QDGj5BWMSNyEfmyDFx7eEvWWm4KujUPJ38Xdkntvxtd",
+          "label": "🤖 High Balance [2QDGj5BW]",
+          "side": "buy",
+          "volume_usd": 149166.49282457324
+        },
+        {
+          "address": "4mK9yCvQQPm1aZcREB4Du2DmLM1V9FoUWXoRgYuUDqB9",
+          "label": "\"chainsawiq\" on pump.fun [4mK9yCvQ]",
+          "side": "buy",
+          "volume_usd": 74906.82626825795
+        }
+      ]
     }
   ],
   "meta": {
-    "api_calls_made": 18,
-    "credits_spent": 78,
+    "api_calls_made": 12,
+    "credits_spent": 12,
     "source": "Nansen API"
   }
 }

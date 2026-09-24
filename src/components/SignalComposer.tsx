@@ -21,13 +21,13 @@ function Seg<T extends string | number>({
   onSelect: (v: T) => void;
 }) {
   return (
-    <div className="inline-flex rounded-lg border border-line bg-bg p-0.5 text-xs">
+    <div className="inline-flex rounded-lg border border-line bg-[var(--sunken)] p-0.5 text-xs">
       {options.map((o) => (
         <button
           key={String(o.v)}
           onClick={() => onSelect(o.v)}
           className={`rounded-[7px] px-2.5 py-1 transition-colors ${
-            value === o.v ? "bg-raised text-text" : "text-muted hover:text-text"
+            value === o.v ? "bg-raised text-text shadow-[0_1px_3px_rgba(27,24,38,0.1)]" : "text-muted hover:text-text"
           }`}
         >
           {o.label}
@@ -60,7 +60,7 @@ export function SignalComposer({ rule, horizons, onChange }: Props) {
 
       <div className="space-y-2.5">
         {rule.conditions.map((c, i) => (
-          <div key={i} className="rounded-xl border border-line bg-bg p-3">
+          <div key={i} className="rounded-xl border border-line bg-[var(--surface-1)] p-3 shadow-[var(--shadow-card)]">
             <div className="flex items-center gap-2">
               <select
                 value={c.cohort}
@@ -129,8 +129,10 @@ export function SignalComposer({ rule, horizons, onChange }: Props) {
             <button
               key={h}
               onClick={() => set({ horizon: h })}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                rule.horizon === h ? "bg-[var(--accent)] text-black" : "border border-line bg-bg text-muted hover:text-text"
+              className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors ${
+                rule.horizon === h
+                  ? "bg-[var(--accent)] text-white"
+                  : "border border-line bg-[var(--surface-1)] text-muted hover:text-text"
               }`}
             >
               {h}d

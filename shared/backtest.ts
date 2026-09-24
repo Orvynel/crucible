@@ -121,6 +121,15 @@ function equityCurve(trades: { as_of: string; r: number }[]): {
 }
 
 /**
+ * The exact scenarios a rule fired on at its horizon — the trades behind the
+ * numbers. Uses the SAME filter the backtest does (usable at the horizon AND
+ * fires), so the receipts list can never disagree with the aggregates.
+ */
+export function firedScenarios(rule: Rule, dataset: Dataset): Scenario[] {
+  return dataset.scenarios.filter((s) => fwd(s, rule.horizon) !== null && fires(rule, s));
+}
+
+/**
  * Run a rule against every scenario in the dataset and score it against the
  * "always in" baseline at the same horizon. The edge fields answer the only
  * question that matters: does the Smart Money signal beat doing nothing?

@@ -39,7 +39,7 @@ export function EquityChart({ equity }: Props) {
   }
 
   const up = geom.end >= 1;
-  const stroke = up ? "var(--accent)" : "var(--neg)";
+  const stroke = up ? "var(--pos)" : "var(--neg)";
   const gridVals = [geom.max, geom.mid, geom.min];
   const fmtX = (v: number) => (v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1) : v.toFixed(2));
 
@@ -54,7 +54,7 @@ export function EquityChart({ equity }: Props) {
 
       {gridVals.map((v, i) => (
         <g key={i}>
-          <line x1={pad.l} x2={W - pad.r} y1={geom.y(v)} y2={geom.y(v)} stroke="rgba(255,255,255,0.05)" />
+          <line x1={pad.l} x2={W - pad.r} y1={geom.y(v)} y2={geom.y(v)} stroke="var(--line)" />
           <text x={pad.l - 8} y={geom.y(v) + 3.5} textAnchor="end" fontSize="10" fill="var(--faint)" className="font-mono">
             {fmtX(v)}x
           </text>

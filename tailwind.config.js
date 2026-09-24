@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         bg: "var(--bg)",
+        sunken: "var(--sunken)",
         surface: "var(--surface-1)",
         surface2: "var(--surface-2)",
         raised: "var(--raised)",
@@ -13,11 +14,13 @@ export default {
         muted: "var(--muted)",
         faint: "var(--faint)",
         accent: "var(--accent)",
+        "accent-2": "var(--accent-2)",
         pos: "var(--pos)",
         neg: "var(--neg)",
       },
       fontFamily: {
-        mono: ["IBM Plex Mono", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+        sans: ["Plus Jakarta Sans Variable", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["Plus Jakarta Sans Variable", "ui-sans-serif", "system-ui", "sans-serif"],
       },
     },
   },

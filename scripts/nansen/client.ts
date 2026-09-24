@@ -20,6 +20,7 @@ export const stats = {
   cacheHits: 0,
   creditsSpent: 0,
   creditsRemaining: null as number | null,
+  lastCallCost: null as number | null, // real cost of the most recent network call, from the response header
 };
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -78,7 +79,12 @@ export async function post<T = unknown>(
 
     const data = (await res.json()) as T;
     stats.networkCalls++;
-    stats.creditsSpent += opts.cost;
+    // Some endpoints (e.g. who-bought-sold) price per call at runtime; prefer the
+    // real cost header when present, otherwise fall back to the declared cost.
+    const costHeader = Number(res.headers.get("x-nansen-credits-cost"));
+    const cost = Number.isFinite(costHeader) && costHeader > 0 ? costHeader : opts.cost;
+    stats.lastCallCost = cost;
+    stats.creditsSpent += cost;
     await writeCache(endpoint, body, data);
     return data;
   }

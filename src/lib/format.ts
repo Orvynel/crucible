@@ -18,6 +18,12 @@ export function usdCompact(x: number): string {
   return `${sign}$${a.toFixed(0)}`;
 }
 
+/** Full dollars with thousands separators, e.g. $12,340 — for the invest outcome. */
+export function usd(x: number): string {
+  const sign = x < 0 ? "-" : "";
+  return `${sign}$${Math.round(Math.abs(x)).toLocaleString("en-US")}`;
+}
+
 export function signedClass(x: number): string {
   return x > 0 ? "text-pos" : x < 0 ? "text-neg" : "text-muted";
 }

@@ -1,5 +1,6 @@
 import type { Cohort } from "@shared/types";
 import type { Rule } from "@shared/backtest";
+import { usdCompact } from "./format";
 
 export const COHORT_LABEL: Record<Cohort, string> = {
   smart_trader: "Smart Traders",
@@ -23,6 +24,17 @@ export interface Preset {
   name: string;
   blurb: string;
   rule: Rule;
+}
+
+/** Human-readable one-liner for a rule, e.g. "Public Figures net-buying · hold 30d". */
+export function describeRule(rule: Rule): string {
+  const parts = rule.conditions.map((c) => {
+    const dir = c.op === "gt" ? "net-buying" : "net-selling";
+    const thr = c.value !== 0 ? ` ≥ ${usdCompact(Math.abs(c.value))}` : "";
+    return `${COHORT_LABEL[c.cohort]} ${dir}${thr}`;
+  });
+  const joined = parts.join(rule.combine === "all" ? " and " : " or ");
+  return `${joined} · hold ${rule.horizon}d`;
 }
 
 // Calibrated on the baked dataset using outlier-robust hit rate vs the

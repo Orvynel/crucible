@@ -29,6 +29,18 @@ export interface CohortFlow {
   wallet_count: number;
 }
 
+/**
+ * One Smart Money wallet's activity in a token over the signal window, from
+ * Nansen's who-bought-sold endpoint. Baked offline (the API key never reaches
+ * the browser). `label` is Nansen's identity for the wallet (e.g. a fund name).
+ */
+export interface WalletTrade {
+  address: string;
+  label?: string;
+  side: "buy" | "sell";
+  volume_usd: number;
+}
+
 /** One OHLCV candle (daily) as returned by Nansen historical-token-ohlcv. */
 export interface Candle {
   interval_start: string; // ISO date
@@ -72,6 +84,8 @@ export interface Scenario {
     flow_window_days: number;
     fetched_at: string;
   };
+  /** Top Smart Money wallets behind the signal (baked offline; optional). */
+  top_wallets?: WalletTrade[];
 }
 
 /** The full dataset baked to public/data/dataset.json. */

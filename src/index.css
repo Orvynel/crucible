@@ -3,21 +3,45 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
-  /* Nansen-grade palette: warm near-black canvas, one bright signal-green accent. */
-  --bg: #070809;
-  --surface-1: #0d0f12;
-  --surface-2: #131519;
-  --raised: #181b21;
-  --line: rgba(255, 255, 255, 0.07);
-  --line-strong: rgba(255, 255, 255, 0.13);
-  --text: #f3f5f0;
-  --muted: #8a909c;
-  --faint: #565b66;
-  --accent: #c8f24e;
-  --accent-soft: rgba(200, 242, 78, 0.14);
-  --pos: #57e08d;
-  --neg: #ff5d73;
+  color-scheme: light;
+  /* Crucible — warm, soft, light. A calm ivory room where white cards float on
+     gentle shadows with generous air. Violet is the single confident brand
+     color; green and rose mean only gain and loss. Low contrast, soft edges,
+     one focal point per view. */
+  --bg: #f4f2ee;
+  --sunken: #efece7;
+  --surface-1: #ffffff;
+  --surface-2: #faf9f6;
+  --raised: #ffffff;
+
+  --text: #1b1826;
+  --muted: #6c6680;
+  --faint: #a49eb0;
+
+  --line: rgba(27, 24, 38, 0.08);
+  --line-strong: rgba(27, 24, 38, 0.14);
+  --highlight: rgba(255, 255, 255, 0.9);
+
+  --accent: #5b63e8;
+  --accent-2: #8f97f7;
+  --accent-dim: #4a52d4;
+  --accent-soft: rgba(91, 99, 232, 0.1);
+
+  --pos: #159d63;
+  --pos-soft: rgba(21, 157, 99, 0.11);
+  --neg: #e04b66;
+  --neg-soft: rgba(224, 75, 102, 0.1);
+
+  /* pastel accent-card tints */
+  --tint-violet: #efeafe;
+  --tint-mint: #e8f6ef;
+  --tint-blush: #fdeef2;
+  --tint-peach: #fdf2e8;
+
+  --shadow-card: 0 1px 2px rgba(27, 24, 38, 0.04), 0 14px 32px -18px rgba(27, 24, 38, 0.18);
+  --shadow-lift: 0 2px 8px rgba(27, 24, 38, 0.05), 0 30px 60px -24px rgba(27, 24, 38, 0.3);
+  --radius: 22px;
+  --radius-sm: 14px;
 }
 
 html,
@@ -28,42 +52,34 @@ body,
 
 body {
   margin: 0;
-  background:
-    radial-gradient(900px 500px at 78% -8%, rgba(200, 242, 78, 0.07), transparent 60%),
-    radial-gradient(700px 500px at 10% 0%, rgba(124, 156, 255, 0.05), transparent 55%),
-    var(--bg);
+  background: var(--bg);
   color: var(--text);
-  font-family: "InterVariable", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-feature-settings: "cv11", "ss01";
+  font-family: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.011em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-.font-mono {
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-/* subtle film grain so flat panels don't read as sterile */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.025;
-  z-index: 1;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* Tabular figures for aligned numbers — the warm sans, not a cold mono. */
+.font-mono,
+.nums {
+  font-family: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  letter-spacing: -0.01em;
 }
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-[var(--line)] bg-[var(--surface-1)];
-    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.03) inset, 0 20px 40px -30px rgba(0, 0, 0, 0.9);
+    @apply rounded-[var(--radius)] border border-[var(--line)] bg-[var(--surface-1)];
+    box-shadow: var(--shadow-card);
   }
-  .hairline {
-    @apply border-[var(--line)];
-  }
+  /* Small section label — sentence case, weight + color carry hierarchy.
+     No shouting all-caps: that reads as a template. */
   .kicker {
-    @apply text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--faint)];
+    @apply text-[12px] font-semibold tracking-tight text-[var(--muted)];
+  }
+  .nav-item {
+    @apply flex w-full items-center gap-3 rounded-2xl px-3.5 py-2.5 text-left transition-all duration-200;
   }
 }
 
@@ -72,8 +88,12 @@ body::before {
   height: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #23262e;
-  border-radius: 6px;
+  background: rgba(27, 24, 38, 0.16);
+  border-radius: 8px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(27, 24, 38, 0.28);
 }
 ::selection {
   background: var(--accent-soft);
@@ -87,7 +107,7 @@ body::before {
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -95,5 +115,21 @@ body::before {
   }
 }
 .rise {
-  animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.rise-2 {
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.07s both;
+}
+.rise-3 {
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

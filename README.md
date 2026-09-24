@@ -6,6 +6,8 @@ Crucible turns Nansen cohort flow data into a hypothesis tester. Pick a cohort (
 
 The verdict is deliberately hard to game. It leads with **hit rate** and **median return** versus an "always in" baseline, because crypto forward returns are ferociously fat-tailed and a raw mean lies. Some signals win, some lose, some are noise — and Crucible says so.
 
+Nothing is hidden behind the headline. Below every verdict sit **the receipts**: a sortable, paginated table of every scenario the signal fired on, and a per-trade drill-down showing all six cohorts' net-flow, the price at the decision date, the forward return at each horizon, the drawdown, and the **actual Smart Money wallets** behind that move — label, address, and dollars bought or sold — pulled from Nansen. Type any dollar amount into the equity panel to see what that stake would have done. It is research tooling, not financial advice.
+
 ## What it found
 
 Straight from the shipped dataset (your own runs may refine these):
@@ -42,11 +44,11 @@ Crucible never ships an API key and never calls Nansen from the browser.
  Nansen key once, disk-cached     (990 scenarios, committed)      backtest math live
 ```
 
-- **Offline builder** ([scripts/build-dataset.ts](scripts/build-dataset.ts)) screens a liquid universe, then for each token pulls one flow-summary per decision date and one OHLCV series, and assembles no-look-ahead scenarios. Every call is disk-cached by `sha256(endpoint + body)`, so re-runs cost **zero credits** and the build is fully resumable.
+- **Offline builder** ([scripts/build-dataset.ts](scripts/build-dataset.ts)) screens a liquid universe, then for each token pulls one flow-summary per decision date, one OHLCV series, and the top Smart Money wallets active in the signal window, and assembles no-look-ahead scenarios. Every call is disk-cached by `sha256(endpoint + body)`, so re-runs cost **zero credits** and the build is fully resumable.
 - **Baked dataset** is a single static JSON. The live app is therefore crash-proof and offline-safe — no key, no rate limits, no runtime spend.
 - **Backtest engine** ([shared/backtest.ts](shared/backtest.ts)) is pure, dependency-free, and identical in the builder and the browser.
 
-Building the full shipped dataset cost **5,645 Nansen credits across 1,129 network calls** — comfortably over the buildathon's 1,000-call bar, with most of the budget left untouched.
+Building the shipped dataset made **2,152 real Nansen calls** — 1,116 historical flow-summary, 1,002 who-bought-sold (the wallet identities), 30 OHLCV series, and 4 universe screens — comfortably over the buildathon's 1,000-call bar. At Nansen's per-endpoint pricing that is roughly **6,700 credits**.
 
 ## Run it (≈5 minutes)
 
@@ -64,6 +66,14 @@ CONFIRM=1 npm run build:dataset   # full build (guarded; ~5.6k credits, resumabl
 ```
 
 `npm run build:dataset -- --sample` writes a tiny sample dataset for a near-free dry run.
+
+## For judges — verify it in a minute
+
+- **No key needed.** `npm install && npm run dev` runs the whole app against the committed dataset. Nothing calls the network at runtime.
+- **No look-ahead, checkable.** Every scenario stores its decision date, the flow window *ending* on it, and forward returns measured *after* it ([shared/backtest.ts](shared/backtest.ts) is the single source of truth for both the builder and the browser — same math, no divergence).
+- **Nansen drives the logic, not the decoration.** Four endpoints do the work: `tgm/historical-token-flow-summary` (the signal), `tgm/historical-token-ohlcv` (the outcome), `token-screener` (the universe), and `tgm/who-bought-sold` (the wallet identities in each drill-down).
+- **Reproducible.** The disk cache makes a rebuild cost zero credits; delete `.cache/` and re-run to pay for a full rebuild from scratch. `npm run smoke` (~11 credits) confirms auth and endpoint shapes before any spend.
+- **Honest by design.** Presets are calibrated to show winners, losers, *and* noise — including a signal that underperforms holding. The method and its limits are stated in-app and below.
 
 ## Stack
 

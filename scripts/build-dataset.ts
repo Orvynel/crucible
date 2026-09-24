@@ -14,10 +14,16 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { Chain, Dataset, Scenario, TokenRef } from "../shared/types.ts";
 
-const { screenTokens, fetchFlow, fetchOhlcv } = await import("./nansen/api.ts");
+const { screenTokens, fetchFlow, fetchOhlcv, fetchWhoBoughtSold } = await import("./nansen/api.ts");
 const { stats } = await import("./nansen/client.ts");
 
 const SAMPLE = process.argv.includes("--sample");
+// Wallet identities (who-bought-sold) are the only extra credit spend. Opt in
+// with WALLETS=1; the run halts wallet fetching once WALLET_CREDIT_BUDGET is hit
+// (scenarios still build, just without baked wallets). Cached calls are free.
+const FETCH_WALLETS = process.env.WALLETS === "1";
+const WALLET_CREDIT_BUDGET = Number(process.env.WALLET_BUDGET ?? 6000);
+const WALLETS_PER_SCENARIO = 5;
 
 const CFG = {
   chains: ["ethereum", "base", "solana"] as Chain[],
@@ -122,6 +128,8 @@ async function main() {
   }
 
   const scenarios: Scenario[] = [];
+  let walletSpend = 0;
+  let walletBudgetHit = false;
   for (const token of universe) {
     const candles = await fetchOhlcv(token.chain, token.token_address, CFG.asOfStart, CFG.ohlcvEnd);
     const series: CloseSeries = { dates: [], close: {}, low: {} };
@@ -142,6 +150,24 @@ async function main() {
       if (!flow) continue;
       const sc = buildScenario(token, asOf, series, flow.flows);
       if (sc) {
+        if (FETCH_WALLETS && !walletBudgetHit) {
+          if (walletSpend >= WALLET_CREDIT_BUDGET) {
+            walletBudgetHit = true;
+            console.log(`  · wallet budget ${WALLET_CREDIT_BUDGET} reached — remaining scenarios build without wallets`);
+          } else {
+            const before = stats.networkCalls;
+            const wallets = await fetchWhoBoughtSold(
+              token.chain,
+              token.token_address,
+              from,
+              asOf,
+              WALLETS_PER_SCENARIO,
+            );
+            if (wallets.length) sc.top_wallets = wallets;
+            // Only count credits when an actual network call was made (cache is free).
+            if (stats.networkCalls > before) walletSpend += stats.lastCallCost ?? 5;
+          }
+        }
         scenarios.push(sc);
         kept++;
       }
@@ -166,6 +192,10 @@ async function main() {
 
   console.log(`\nwrote ${outFile}`);
   console.log(`scenarios: ${scenarios.length}  network calls: ${stats.networkCalls}  cache hits: ${stats.cacheHits}`);
+  if (FETCH_WALLETS) {
+    const withWallets = scenarios.filter((s) => s.top_wallets?.length).length;
+    console.log(`wallet-baked scenarios: ${withWallets}/${scenarios.length}  wallet credits this run: ~${walletSpend}`);
+  }
   console.log(`credits spent this run: ${stats.creditsSpent}  remaining: ${stats.creditsRemaining ?? "n/a"}`);
 }
 
