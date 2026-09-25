@@ -36,7 +36,7 @@ export default async function handler(req: Req, res: ServerResponse): Promise<vo
   res.setHeader("cache-control", "no-store");
   const diag = (req.url ?? "").includes("__diag=1");
   try {
-    const mod = await import("../shared/liveQuery");
+    const mod = await import("../shared/liveQuery.js");
     const handleLiveQuery = (mod as { handleLiveQuery: (raw: unknown, ip: string) => Promise<{ status: number; body: unknown }> })
       .handleLiveQuery;
     if (diag) {

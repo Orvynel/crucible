@@ -3,10 +3,10 @@
 // API key from the environment and it never reaches the browser. Uses only fetch
 // + process.env so it runs on any server runtime. Endpoint definitions mirror the
 // offline builder in scripts/nansen/api.ts.
-import type { Cohort } from "./types";
-import { COHORTS } from "./types";
-import type { LiveChain } from "./liveChains";
-import { addrHint, CHAIN_LABELS, isChainAllowed, tokenLooksValid } from "./liveChains";
+import type { Cohort } from "./types.js";
+import { COHORTS } from "./types.js";
+import type { LiveChain } from "./liveChains.js";
+import { addrHint, CHAIN_LABELS, isChainAllowed, tokenLooksValid } from "./liveChains.js";
 import type {
   CandleRow,
   CohortFlowRow,
