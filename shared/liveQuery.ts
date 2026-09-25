@@ -3,8 +3,10 @@
 // API key from the environment and it never reaches the browser. Uses only fetch
 // + process.env so it runs on any server runtime. Endpoint definitions mirror the
 // offline builder in scripts/nansen/api.ts.
-import type { Chain, Cohort } from "./types";
+import type { Cohort } from "./types";
 import { COHORTS } from "./types";
+import type { LiveChain } from "./liveChains";
+import { addrHint, CHAIN_LABELS, isChainAllowed, tokenLooksValid } from "./liveChains";
 import type {
   CandleRow,
   CohortFlowRow,
@@ -18,7 +20,6 @@ import type {
 const V1 = "https://api.nansen.ai/api/v1";
 const V1BETA = "https://api.nansen.ai/api/v1beta1";
 
-const CHAINS: Chain[] = ["ethereum", "base", "solana"];
 const CALLS: LiveCall[] = ["screener", "flows", "ohlcv", "wallets"];
 
 // Bounds so any single public call stays cheap and predictable.
@@ -41,12 +42,9 @@ const SMART_MONEY_LABELS = [
   "Whale",
 ];
 
-const EVM_ADDR = /^0x[a-fA-F0-9]{40}$/;
-const SOL_ADDR = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
-
 export interface NormalizedInput {
   call: LiveCall;
-  chain: Chain;
+  chain: LiveChain;
   token_address: string;
   from: string;
   to: string;
@@ -70,8 +68,10 @@ export function validateInput(raw: unknown): ValidateResult {
   const q = (raw ?? {}) as Record<string, unknown>;
   const call = q.call as LiveCall;
   if (!CALLS.includes(call)) return { ok: false, error: "invalid_input", message: "Unknown call type." };
-  const chain = q.chain as Chain;
-  if (!CHAINS.includes(chain)) return { ok: false, error: "invalid_input", message: "Pick a supported chain." };
+  const chain = q.chain as LiveChain;
+  if (!isChainAllowed(call, chain)) {
+    return { ok: false, error: "invalid_input", message: "That chain isn't available for this call." };
+  }
 
   const per_page = clampInt(q.per_page, 1, MAX_PER_PAGE, call === "wallets" ? 8 : MAX_PER_PAGE);
 
@@ -90,10 +90,16 @@ export function validateInput(raw: unknown): ValidateResult {
   let token_address = typeof q.token_address === "string" ? q.token_address.trim() : "";
   if (call !== "screener") {
     if (!token_address) return { ok: false, error: "invalid_token", message: "Enter a token address." };
-    const good = chain === "solana" ? SOL_ADDR.test(token_address) : EVM_ADDR.test(token_address);
-    if (!good) {
-      const label = chain[0].toUpperCase() + chain.slice(1);
-      return { ok: false, error: "invalid_token", message: `That token address isn't valid on ${label}.` };
+    if (!tokenLooksValid(chain, token_address)) {
+      const label = CHAIN_LABELS[chain] ?? chain;
+      const hint = addrHint(chain);
+      const message =
+        hint === "evm"
+          ? `That isn't a valid 0x… contract address on ${label}.`
+          : hint === "solana"
+            ? `That isn't a valid ${label} mint address.`
+            : `That doesn't look like a valid token address on ${label}.`;
+      return { ok: false, error: "invalid_token", message };
     }
   } else {
     token_address = "";

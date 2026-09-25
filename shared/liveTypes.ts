@@ -3,13 +3,14 @@
 // produces them, and the browser (src/lib/liveClient.ts, LiveExplorer) consumes
 // them. Types only — no runtime code — so importing this into the client bundle
 // pulls in nothing executable and can never drag the key-holding proxy along.
-import type { Chain, Cohort } from "./types";
+import type { Cohort } from "./types";
+import type { LiveChain } from "./liveChains";
 
 export type LiveCall = "screener" | "flows" | "ohlcv" | "wallets";
 
 export interface LiveQueryInput {
   call: LiveCall;
-  chain: Chain;
+  chain: LiveChain;
   token_address?: string;
   from?: string; // YYYY-MM-DD
   to?: string; // YYYY-MM-DD
@@ -65,7 +66,7 @@ export type LiveError =
 export interface LiveResponseBody {
   ok: boolean;
   call?: LiveCall;
-  chain?: Chain;
+  chain?: LiveChain;
   count?: number;
   data?: LiveData;
   request?: { endpoint: string; body: unknown };

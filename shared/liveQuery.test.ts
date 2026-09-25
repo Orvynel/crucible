@@ -46,6 +46,31 @@ describe("validateInput", () => {
     expect(r.ok).toBe(false);
   });
 
+  it("accepts a widened EVM chain (arbitrum)", () => {
+    expect(pass({ call: "flows", chain: "arbitrum", token_address: UNI }).chain).toBe("arbitrum");
+  });
+
+  it("accepts a non-EVM/non-Solana chain with a plausible address (tron)", () => {
+    const r = validateInput({ call: "ohlcv", chain: "tron", token_address: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t" });
+    expect(r.ok).toBe(true);
+  });
+
+  it("rejects a chain the chosen call doesn't support (bitcoin on flows)", () => {
+    const r = validateInput({ call: "flows", chain: "bitcoin", token_address: "irrelevant" });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error).toBe("invalid_input");
+  });
+
+  it("accepts bitcoin on OHLCV, where Nansen supports it", () => {
+    const r = validateInput({ call: "ohlcv", chain: "bitcoin", token_address: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" });
+    expect(r.ok).toBe(true);
+  });
+
+  it("accepts citrea on the screener but not on OHLCV", () => {
+    expect(pass({ call: "screener", chain: "citrea" }).chain).toBe("citrea");
+    expect(validateInput({ call: "ohlcv", chain: "citrea", token_address: UNI }).ok).toBe(false);
+  });
+
   it("ignores any token address for the screener", () => {
     expect(pass({ call: "screener", chain: "base", token_address: UNI }).token_address).toBe("");
   });
@@ -93,5 +118,17 @@ describe("buildNansenRequest", () => {
     expect(buildNansenRequest({ ...base, call: "flows" }).cost).toBe(5);
     expect(buildNansenRequest({ ...base, call: "ohlcv" }).cost).toBe(5);
     expect(buildNansenRequest({ ...base, call: "wallets" }).cost).toBe(1);
+  });
+
+  it("passes the selected chain through to the screener body", () => {
+    const req = buildNansenRequest({
+      call: "screener",
+      chain: "arbitrum",
+      token_address: "",
+      from: "2026-02-01",
+      to: "2026-02-08",
+      per_page: 10,
+    });
+    expect((req.body as { chains: string[] }).chains).toEqual(["arbitrum"]);
   });
 });

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { Chain } from "@shared/types";
 import type {
   CandleRow,
   CohortFlowRow,
@@ -9,6 +8,8 @@ import type {
   ScreenerToken,
   WalletRow,
 } from "@shared/liveTypes";
+import type { LiveChain } from "@shared/liveChains";
+import { CALL_CHAINS, CHAIN_LABELS, tokenPlaceholder } from "@shared/liveChains";
 import { runLiveQuery } from "../lib/liveClient";
 import { usdCompact, pct, signedClass } from "../lib/format";
 import { COHORT_LABEL, COHORT_HINT } from "../lib/presets";
@@ -25,11 +26,6 @@ const CALL_META: Record<LiveCall, { name: string; purpose: string; cost: number;
   wallets: { name: "Who bought & sold", purpose: "The labelled Smart Money wallets trading one token.", cost: 1, needsToken: true },
 };
 const CALL_ORDER: LiveCall[] = ["screener", "flows", "ohlcv", "wallets"];
-const CHAIN_META: { id: Chain; name: string }[] = [
-  { id: "ethereum", name: "Ethereum" },
-  { id: "base", name: "Base" },
-  { id: "solana", name: "Solana" },
-];
 
 const short = (a: string): string => (a.length > 14 ? `${a.slice(0, 6)}…${a.slice(-4)}` : a);
 const fmtPrice = (n: number): string => (n >= 1 ? `$${n.toFixed(2)}` : n > 0 ? `$${n.toPrecision(3)}` : "—");
@@ -45,7 +41,7 @@ function Spinner() {
 
 export function LiveExplorer({ onBack }: { onBack: () => void }) {
   const [call, setCall] = useState<LiveCall>("screener");
-  const [chain, setChain] = useState<Chain>("ethereum");
+  const [chain, setChain] = useState<LiveChain>("ethereum");
   const [token, setToken] = useState("");
   const range = defaultRange();
   const [from, setFrom] = useState(range.from);
@@ -56,6 +52,19 @@ export function LiveExplorer({ onBack }: { onBack: () => void }) {
   const [browse, setBrowse] = useState<{ loading: boolean; tokens: ScreenerToken[] } | null>(null);
 
   const meta = CALL_META[call];
+  const chains = CALL_CHAINS[call];
+  const canBrowse = (CALL_CHAINS.screener as readonly string[]).includes(chain);
+
+  // Some chains a call doesn't support (e.g. the screener lists bitcoin/citrea that
+  // flows can't take). When switching calls, keep the chain if it's still valid, else
+  // fall back to Ethereum — every call supports it.
+  function chooseCall(id: LiveCall) {
+    setCall(id);
+    if (!(CALL_CHAINS[id] as readonly string[]).includes(chain)) setChain("ethereum");
+    setBrowse(null);
+    setRes(null);
+    setInputError(null);
+  }
 
   async function run() {
     if (meta.needsToken && !token.trim()) {
@@ -82,7 +91,15 @@ export function LiveExplorer({ onBack }: { onBack: () => void }) {
 
   function pickFromScreener(addr: string) {
     setToken(addr);
-    setCall("flows");
+    // Drill from a screened token into the richest call that supports this chain.
+    const target: LiveCall = (CALL_CHAINS.flows as readonly string[]).includes(chain)
+      ? "flows"
+      : (CALL_CHAINS.ohlcv as readonly string[]).includes(chain)
+        ? "ohlcv"
+        : (CALL_CHAINS.wallets as readonly string[]).includes(chain)
+          ? "wallets"
+          : "screener";
+    setCall(target);
     setRes(null);
     setInputError(null);
   }
@@ -121,11 +138,7 @@ export function LiveExplorer({ onBack }: { onBack: () => void }) {
               return (
                 <button
                   key={id}
-                  onClick={() => {
-                    setCall(id);
-                    setRes(null);
-                    setInputError(null);
-                  }}
+                  onClick={() => chooseCall(id)}
                   className="card p-4 text-left transition hover:-translate-y-0.5"
                   style={sel ? { borderColor: "var(--accent)", boxShadow: "0 0 0 2px var(--accent-soft), var(--shadow-card)" } : undefined}
                 >
@@ -145,18 +158,34 @@ export function LiveExplorer({ onBack }: { onBack: () => void }) {
           <div className="card mt-3 p-5">
             <div className="flex flex-wrap items-center gap-2">
               <span className="w-[64px] text-[12.5px] font-semibold text-muted">Chain</span>
-              <div className="inline-flex overflow-hidden rounded-xl border border-line">
-                {CHAIN_META.map((c, i) => (
-                  <button
-                    key={c.id}
-                    onClick={() => setChain(c.id)}
-                    className={`px-3.5 py-1.5 text-[13px] font-semibold transition ${i > 0 ? "border-l border-line" : ""} ${chain === c.id ? "text-white" : "text-muted hover:text-text"}`}
-                    style={chain === c.id ? { background: "var(--accent)" } : undefined}
-                  >
-                    {c.name}
-                  </button>
-                ))}
+              <div className="relative">
+                <select
+                  value={chain}
+                  onChange={(e) => {
+                    setChain(e.target.value as LiveChain);
+                    setBrowse(null);
+                  }}
+                  className="nums appearance-none rounded-xl border border-line bg-[var(--surface-2)] py-2 pl-3.5 pr-9 text-[13px] font-semibold text-text outline-none transition focus:border-accent"
+                >
+                  {chains.map((c) => (
+                    <option key={c} value={c}>
+                      {CHAIN_LABELS[c]}
+                    </option>
+                  ))}
+                </select>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted"
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
               </div>
+              <span className="text-[11.5px] text-faint">{chains.length} chains supported</span>
             </div>
 
             {meta.needsToken && (
@@ -170,17 +199,19 @@ export function LiveExplorer({ onBack }: { onBack: () => void }) {
                       setInputError(null);
                     }}
                     spellCheck={false}
-                    placeholder={chain === "solana" ? "Mint address (base58)" : "0x… token contract"}
+                    placeholder={tokenPlaceholder(chain)}
                     className="nums min-w-0 flex-1 rounded-xl border border-line bg-[var(--surface-2)] px-3 py-2 text-[13px] outline-none transition focus:border-accent"
                   />
-                  <button onClick={browseTokens} className="rounded-xl border border-line px-3 py-2 text-[12.5px] font-semibold text-muted transition hover:text-text">
-                    Browse tokens
-                  </button>
+                  {canBrowse && (
+                    <button onClick={browseTokens} className="rounded-xl border border-line px-3 py-2 text-[12.5px] font-semibold text-muted transition hover:text-text">
+                      Browse tokens
+                    </button>
+                  )}
                 </div>
                 {browse && (
                   <div className="mt-2 rounded-xl border border-line bg-[var(--surface-2)] p-2">
                     {browse.loading ? (
-                      <div className="px-2 py-3 text-[12.5px] text-muted">Loading top tokens on {chain}…</div>
+                      <div className="px-2 py-3 text-[12.5px] text-muted">Loading top tokens on {CHAIN_LABELS[chain]}…</div>
                     ) : browse.tokens.length === 0 ? (
                       <div className="px-2 py-3 text-[12.5px] text-muted">Couldn’t load tokens right now — enter an address manually.</div>
                     ) : (
@@ -260,7 +291,7 @@ function Results({ res, onPickToken }: { res: LiveResponseBody; onPickToken: (ad
         <div className="flex items-center gap-2">
           <span className="text-[14px] font-extrabold tracking-tight">{res.call ? CALL_META[res.call].name : "Result"}</span>
           <span className="text-[12.5px] text-faint">
-            {res.count ?? data.length} rows · {res.chain}
+            {res.count ?? data.length} rows · {res.chain ? CHAIN_LABELS[res.chain] : ""}
           </span>
           {res.cached && <span className="rounded-full bg-[var(--surface-2)] px-2 py-0.5 text-[11px] font-semibold text-muted">cached</span>}
         </div>
