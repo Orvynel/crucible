@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Dataset } from "@shared/types";
 import type { Rule } from "@shared/backtest";
@@ -13,6 +13,7 @@ import { TradesTable } from "./components/TradesTable";
 import { ReferenceSections } from "./components/ReferenceSections";
 import { Landing } from "./components/Landing";
 import { Logo } from "./components/Logo";
+import { LiveExplorer } from "./components/LiveExplorer";
 
 export default function App() {
   const state = useDataset();
@@ -70,16 +71,29 @@ function Shell({ dataset, onHome }: { dataset: Dataset; onHome: () => void }) {
   const [rule, setRule] = useState<Rule>(PRESETS[0].rule);
   const [active, setActive] = useState(0);
   const [tokenFilter, setTokenFilter] = useState<string | null>(null);
+  const [view, setView] = useState<"backtest" | "explorer">(() =>
+    typeof location !== "undefined" && location.hash === "#explorer" ? "explorer" : "backtest",
+  );
   const result = useMemo(() => backtest(rule, dataset), [rule, dataset]);
   const presetEdges = useMemo(() => PRESETS.map((p) => backtest(p.rule, dataset).edgeHitRate), [dataset]);
+
+  useEffect(() => {
+    if (typeof location === "undefined") return;
+    const target = view === "explorer" ? "#explorer" : "";
+    if ((location.hash || "") !== target) {
+      history.replaceState(null, "", target || location.pathname + location.search);
+    }
+  }, [view]);
 
   const pick = (i: number) => {
     setActive(i);
     setRule(PRESETS[i].rule);
+    setView("backtest");
   };
   const compose = (r: Rule) => {
     setActive(-1);
     setRule(r);
+    setView("backtest");
   };
   const selectToken = (addr: string) => {
     setTokenFilter((cur) => (cur === addr ? null : addr));
@@ -96,33 +110,41 @@ function Shell({ dataset, onHome }: { dataset: Dataset; onHome: () => void }) {
         onPick={pick}
         onCompose={compose}
         onHome={onHome}
+        view={view}
+        onExplorer={() => setView("explorer")}
       />
       <main className="flex h-full min-w-0 flex-1 flex-col overflow-hidden">
-        <TopBar dataset={dataset} />
-        <div className="flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-[1440px] px-6 py-7 xl:px-9">
-            <NansenBanner />
-            <ResultsPanel r={result} label={active >= 0 ? PRESETS[active].name : "Custom signal"} rule={rule} />
+        {view === "explorer" ? (
+          <LiveExplorer onBack={() => setView("backtest")} />
+        ) : (
+          <>
+            <TopBar dataset={dataset} />
+            <div className="flex-1 overflow-y-auto">
+              <div className="mx-auto max-w-[1440px] px-6 py-7 xl:px-9">
+                <NansenBanner onTryLive={() => setView("explorer")} />
+                <ResultsPanel r={result} label={active >= 0 ? PRESETS[active].name : "Custom signal"} rule={rule} />
 
-            <SectionHead title="The evidence" hint="Every trade behind the verdict — click a row for the full scenario" />
-            <div className="space-y-4">
-              <SignalBreakdown rule={rule} dataset={dataset} />
-              <div id="trades">
-                <TradesTable
-                  rule={rule}
-                  dataset={dataset}
-                  tokenAddress={tokenFilter}
-                  onClearToken={() => setTokenFilter(null)}
-                />
+                <SectionHead title="The evidence" hint="Every trade behind the verdict — click a row for the full scenario" />
+                <div className="space-y-4">
+                  <SignalBreakdown rule={rule} dataset={dataset} />
+                  <div id="trades">
+                    <TradesTable
+                      rule={rule}
+                      dataset={dataset}
+                      tokenAddress={tokenFilter}
+                      onClearToken={() => setTokenFilter(null)}
+                    />
+                  </div>
+                </div>
+
+                <SectionHead title="Reference" hint="The full universe under test and the cohort key" />
+                <ReferenceSections dataset={dataset} selectedToken={tokenFilter} onSelectToken={selectToken} />
+
+                <MethodFooter dataset={dataset} />
               </div>
             </div>
-
-            <SectionHead title="Reference" hint="The full universe under test and the cohort key" />
-            <ReferenceSections dataset={dataset} selectedToken={tokenFilter} onSelectToken={selectToken} />
-
-            <MethodFooter dataset={dataset} />
-          </div>
-        </div>
+          </>
+        )}
       </main>
     </div>
   );
@@ -136,6 +158,8 @@ function Sidebar({
   onPick,
   onCompose,
   onHome,
+  view,
+  onExplorer,
 }: {
   dataset: Dataset;
   rule: Rule;
@@ -144,6 +168,8 @@ function Sidebar({
   onPick: (i: number) => void;
   onCompose: (r: Rule) => void;
   onHome: () => void;
+  view: "backtest" | "explorer";
+  onExplorer: () => void;
 }) {
   return (
     <aside className="flex h-full w-[340px] shrink-0 flex-col border-r border-line bg-[var(--surface-1)]">
@@ -160,6 +186,27 @@ function Sidebar({
       </button>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5">
+        <button
+          onClick={onExplorer}
+          className={`nav-item mb-5 ${
+            view === "explorer" ? "bg-[var(--accent-soft)] text-text" : "text-muted hover:bg-[var(--surface-2)] hover:text-text"
+          }`}
+        >
+          <span
+            className="grid h-7 w-7 shrink-0 place-items-center rounded-lg"
+            style={{ background: "rgba(91,99,232,0.14)", color: "var(--accent)" }}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-[15px] w-[15px]">
+              <path d="M4 17l6-6-6-6" />
+              <path d="M12 19h8" />
+            </svg>
+          </span>
+          <span className="flex-1 text-[13px] font-semibold leading-tight">Live API explorer</span>
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+          </span>
+        </button>
         <span className="kicker px-1.5">Signals</span>
         <div className="mt-3 space-y-1">
           {PRESETS.map((p, i) => (
@@ -223,7 +270,7 @@ function TopBar({ dataset }: { dataset: Dataset }) {
   );
 }
 
-function NansenBanner() {
+function NansenBanner({ onTryLive }: { onTryLive: () => void }) {
   return (
     <div
       className="mb-6 overflow-hidden rounded-[var(--radius)] border border-line"
@@ -248,13 +295,24 @@ function NansenBanner() {
             </p>
           </div>
         </div>
-        <span
-          className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-full px-3.5 py-1.5 text-[12px] font-bold sm:self-center"
-          style={{ background: "rgba(91,99,232,0.12)", color: "var(--accent)" }}
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-          Powered by Nansen
-        </span>
+        <div className="flex shrink-0 flex-col items-start gap-2 self-start sm:items-end sm:self-center">
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[12px] font-bold"
+            style={{ background: "rgba(91,99,232,0.12)", color: "var(--accent)" }}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            Powered by Nansen
+          </span>
+          <button
+            onClick={onTryLive}
+            className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3.5 py-1.5 text-[12px] font-bold text-white transition hover:bg-[var(--accent-dim)]"
+          >
+            Try it live
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </button>
+        </div>
       </div>
       <div
         className="flex items-start gap-2.5 border-t px-5 py-3 text-[12.5px] leading-relaxed"

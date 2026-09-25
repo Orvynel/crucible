@@ -15,4 +15,10 @@ export default defineConfig({
       "@shared": path.resolve(__dirname, "./shared"),
     },
   },
+  // Dev only: forward /api/* to the local Nansen proxy (`npm run dev:proxy`) so the
+  // live explorer works under `npm run dev`. In production the Vercel function
+  // api/nansen.ts serves /api/nansen; this block is ignored by `vite build`.
+  server: {
+    proxy: { "/api": { target: "http://localhost:8787", changeOrigin: true } },
+  },
 });
