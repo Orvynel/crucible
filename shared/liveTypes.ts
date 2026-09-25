@@ -76,3 +76,12 @@ export interface LiveResponseBody {
   message?: string;
   retryAfter?: number;
 }
+
+// Restore reply: the visitor's last query + result, held server-side (never in the
+// browser) and keyed to their IP. `ok:false` means nothing saved yet, or the server
+// has no persistence store configured — either way the explorer just opens fresh.
+export interface RestoreResponseBody {
+  ok: boolean;
+  saved?: { input: LiveQueryInput; body: LiveResponseBody; at: number };
+  error?: "none" | "not_configured";
+}

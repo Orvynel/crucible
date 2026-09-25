@@ -6,7 +6,7 @@
 // (shared/liveQuery.ts) runs inside the serverless function instead.
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { config } from "dotenv";
-import { handleLiveQuery } from "../shared/liveQuery.ts";
+import { handleLiveQuery, handleRestore } from "../shared/liveQuery.ts";
 
 config({ path: ".env.local" });
 
@@ -37,7 +37,10 @@ createServer(async (req: IncomingMessage, res: ServerResponse) => {
     res.end(JSON.stringify({ ok: false, error: "invalid_input", message: "Use POST /api/nansen." }));
     return;
   }
-  const { status, body } = await handleLiveQuery(await readJson(req), clientIp(req));
+  const input = await readJson(req);
+  const ip = clientIp(req);
+  const action = (input as { action?: unknown } | null)?.action;
+  const { status, body } = action === "restore" ? await handleRestore(ip) : await handleLiveQuery(input, ip);
   res.statusCode = status;
   res.end(JSON.stringify(body));
 }).listen(PORT, () => {

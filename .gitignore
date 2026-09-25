@@ -33,3 +33,6 @@ vite.config.d.ts
 New Text Document*.txt
 *.local.txt
 
+# demo recording — kept local, not part of the shipped repo
+video/
+

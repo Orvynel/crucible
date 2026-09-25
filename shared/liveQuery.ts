@@ -13,9 +13,11 @@ import type {
   LiveCall,
   LiveData,
   LiveResponseBody,
+  RestoreResponseBody,
   ScreenerToken,
   WalletRow,
 } from "./liveTypes";
+import { loadLast, saveLast, storeConfigured } from "./liveStore.js";
 
 const V1 = "https://api.nansen.ai/api/v1";
 const V1BETA = "https://api.nansen.ai/api/v1beta1";
@@ -282,7 +284,9 @@ export async function handleLiveQuery(
   const ck = `${input.call}:${input.chain}:${input.token_address}:${input.from}:${input.to}:${input.per_page}`;
   const cached = cache.get(ck);
   if (cached && Date.now() - cached.at < CACHE_TTL_MS) {
-    return { status: 200, body: { ...cached.body, cached: true } };
+    const body = { ...cached.body, cached: true };
+    await saveLast(clientIp, { input, body, at: Date.now() });
+    return { status: 200, body };
   }
 
   if (lastRemaining !== null && lastRemaining < minCredits()) {
@@ -345,5 +349,19 @@ export async function handleLiveQuery(
     cached: false,
   };
   cache.set(ck, { at: Date.now(), body: out });
+  await saveLast(clientIp, { input, body: out, at: Date.now() });
   return { status: 200, body: out };
+}
+
+/**
+ * Returns the caller's last saved query (see shared/liveStore.ts) so the client can
+ * restore their search + results after a reload. Reads only our own server-side store —
+ * it never calls Nansen — so it works regardless of the API key. `ok:false` means there
+ * is nothing to restore, or no persistence store is configured on this deployment.
+ */
+export async function handleRestore(clientIp: string): Promise<{ status: number; body: RestoreResponseBody }> {
+  if (!storeConfigured()) return { status: 200, body: { ok: false, error: "not_configured" } };
+  const saved = await loadLast(clientIp);
+  if (!saved) return { status: 200, body: { ok: false, error: "none" } };
+  return { status: 200, body: { ok: true, saved } };
 }

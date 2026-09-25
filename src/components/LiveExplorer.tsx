@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type {
   CandleRow,
   CohortFlowRow,
@@ -10,7 +10,7 @@ import type {
 } from "@shared/liveTypes";
 import type { LiveChain } from "@shared/liveChains";
 import { CALL_CHAINS, CHAIN_LABELS, tokenPlaceholder } from "@shared/liveChains";
-import { runLiveQuery } from "../lib/liveClient";
+import { runLiveQuery, restoreLastQuery } from "../lib/liveClient";
 import { usdCompact, pct, signedClass } from "../lib/format";
 import { COHORT_LABEL, COHORT_HINT } from "../lib/presets";
 
@@ -50,6 +50,28 @@ export function LiveExplorer({ onBack }: { onBack: () => void }) {
   const [res, setRes] = useState<LiveResponseBody | null>(null);
   const [inputError, setInputError] = useState<string | null>(null);
   const [browse, setBrowse] = useState<{ loading: boolean; tokens: ScreenerToken[] } | null>(null);
+  const [restored, setRestored] = useState(false);
+
+  // Restore the visitor's last search on load. The record lives on the SERVER, keyed to
+  // their IP (see shared/liveStore.ts) — nothing is read from or written to their device —
+  // so a reload brings back exactly their own search + results, and no one else's.
+  useEffect(() => {
+    let alive = true;
+    void restoreLastQuery().then((r) => {
+      if (!alive || !r.ok || !r.saved) return;
+      const { input, body } = r.saved;
+      setCall(input.call);
+      setChain(input.chain);
+      if (input.token_address) setToken(input.token_address);
+      if (input.from) setFrom(input.from);
+      if (input.to) setTo(input.to);
+      setRes(body);
+      setRestored(true);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const meta = CALL_META[call];
   const chains = CALL_CHAINS[call];
@@ -64,6 +86,7 @@ export function LiveExplorer({ onBack }: { onBack: () => void }) {
     setBrowse(null);
     setRes(null);
     setInputError(null);
+    setRestored(false);
   }
 
   async function run() {
@@ -72,6 +95,7 @@ export function LiveExplorer({ onBack }: { onBack: () => void }) {
       return;
     }
     setInputError(null);
+    setRestored(false);
     setLoading(true);
     const input: LiveQueryInput = { call, chain };
     if (meta.needsToken) input.token_address = token.trim();
@@ -102,6 +126,7 @@ export function LiveExplorer({ onBack }: { onBack: () => void }) {
     setCall(target);
     setRes(null);
     setInputError(null);
+    setRestored(false);
   }
 
   return (
@@ -267,7 +292,22 @@ export function LiveExplorer({ onBack }: { onBack: () => void }) {
             </div>
           </div>
 
-          {res && <div className="mt-6">{res.ok ? <Results res={res} onPickToken={pickFromScreener} /> : <ErrorCard res={res} />}</div>}
+          {restored && res && (
+            <p className="mt-6 flex items-center gap-2 text-[12.5px] text-muted">
+              <span
+                className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
+                style={{ background: "var(--accent-soft)", color: "var(--accent)" }}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3">
+                  <path d="M3 3v5h5" />
+                  <path d="M3.05 13A9 9 0 1 0 6 5.3L3 8" />
+                  <path d="M12 7v5l4 2" />
+                </svg>
+              </span>
+              Picked up where you left off — your last search is saved for you on our side, so a reload won’t lose it.
+            </p>
+          )}
+          {res && <div className={restored ? "mt-3" : "mt-6"}>{res.ok ? <Results res={res} onPickToken={pickFromScreener} /> : <ErrorCard res={res} />}</div>}
 
           <p className="mt-8 flex items-start gap-2 text-[12px] leading-relaxed text-faint">
             <span className="mt-[1px] shrink-0 font-bold text-muted">Server-side key.</span>

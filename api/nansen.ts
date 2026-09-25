@@ -42,9 +42,11 @@ export default async function handler(req: Req, res: ServerResponse): Promise<vo
   try {
     // Loaded lazily inside the try so a module-load error becomes parseable JSON
     // for the client rather than an unhandled 500 page.
-    const { handleLiveQuery } = await import("../shared/liveQuery.js");
+    const { handleLiveQuery, handleRestore } = await import("../shared/liveQuery.js");
     const input = await readJson(req);
-    const { status, body } = await handleLiveQuery(input, clientIp(req));
+    const ip = clientIp(req);
+    const action = (input as { action?: unknown } | null)?.action;
+    const { status, body } = action === "restore" ? await handleRestore(ip) : await handleLiveQuery(input, ip);
     res.statusCode = status;
     res.end(JSON.stringify(body));
   } catch {
