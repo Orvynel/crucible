@@ -4,7 +4,6 @@
 // browser — the client only ever talks to this endpoint. All logic lives in the
 // runtime-agnostic core (shared/liveQuery.ts), shared with the Vite dev middleware.
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { handleLiveQuery } from "../shared/liveQuery";
 
 type Req = IncomingMessage & { body?: unknown };
 
@@ -35,13 +34,35 @@ async function readJson(req: Req): Promise<unknown> {
 export default async function handler(req: Req, res: ServerResponse): Promise<void> {
   res.setHeader("content-type", "application/json");
   res.setHeader("cache-control", "no-store");
-  if (req.method !== "POST") {
-    res.statusCode = 405;
-    res.end(JSON.stringify({ ok: false, error: "invalid_input", message: "Use POST." }));
-    return;
+  const diag = (req.url ?? "").includes("__diag=1");
+  try {
+    const mod = await import("../shared/liveQuery");
+    const handleLiveQuery = (mod as { handleLiveQuery: (raw: unknown, ip: string) => Promise<{ status: number; body: unknown }> })
+      .handleLiveQuery;
+    if (diag) {
+      res.statusCode = 200;
+      res.end(
+        JSON.stringify({
+          diag: "import-ok",
+          handleType: typeof handleLiveQuery,
+          hasKey: !!process.env.NANSEN_API_KEY,
+          liveEnabledEnv: process.env.NANSEN_LIVE_ENABLED ?? null,
+          node: process.version,
+        }),
+      );
+      return;
+    }
+    if (req.method !== "POST") {
+      res.statusCode = 405;
+      res.end(JSON.stringify({ ok: false, error: "invalid_input", message: "Use POST." }));
+      return;
+    }
+    const input = await readJson(req);
+    const { status, body } = await handleLiveQuery(input, clientIp(req));
+    res.statusCode = status;
+    res.end(JSON.stringify(body));
+  } catch (err) {
+    res.statusCode = 200;
+    res.end(JSON.stringify({ ok: false, error: "debug", message: String((err as Error)?.stack ?? err), node: process.version }));
   }
-  const input = await readJson(req);
-  const { status, body } = await handleLiveQuery(input, clientIp(req));
-  res.statusCode = status;
-  res.end(JSON.stringify(body));
 }
