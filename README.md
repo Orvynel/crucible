@@ -35,9 +35,26 @@ A rule is evaluated only against the signal, so it can never see the future it i
 
 **Robust to outliers.** One token in this universe ran +86,000% in a week — enough to drag the naive 7-day mean to +88% while the median sat near 0%. So the headline metrics are hit rate and median. Any averaged or compounded figure (the equity curve, the mean stat) winsorizes each trade to ±200% so a single lottery ticket can't manufacture an edge. The equity curve compounds an **equal-weight basket per decision date** — an executable strategy, not a fantasy of reinvesting 100% into every overlapping trade — on a log axis.
 
+## Live API explorer
+
+The backtest runs entirely on the baked dataset — no key, no runtime spend. That invites a fair challenge: *is this data real, and still live?* Crucible answers it in-app, with a **live explorer** that runs real Nansen queries on demand.
+
+Pick one of the four calls the backtest is built on — token screener, cohort flow summary, OHLCV, or who-bought-sold — choose a chain and token, and run it against Nansen live. Every result renders beside the **exact request and the raw response**, so it reads as a real API console, not a canned demo.
+
+It covers **every chain each endpoint supports** — 27 for the screener, 26 for flows and who-bought-sold, 35 for OHLCV — taken from Nansen's own per-endpoint docs, so the chain picker always offers exactly what the chosen call can answer and nothing it can't.
+
+**The key still never reaches the browser.** The explorer calls Crucible's own same-origin `/api/nansen`; that function runs server-side, reads `NANSEN_API_KEY` from the environment, calls Nansen, and returns only the mapped result. Because the endpoint is public, it is hardened rather than trusted:
+
+- **Allowlisted** — only the four calls, only chain/call pairs Nansen actually supports, token addresses shape-checked per chain family.
+- **Bounded cost** — page sizes and date ranges are clamped, so any single call spends a fixed 1–5 credits.
+- **Rate-limited** — a per-IP sliding window returns a friendly 429 under load.
+- **Credit floor** — the proxy reads Nansen's reported remaining balance on every call and pauses before the account falls below a reserve you set (`NANSEN_MIN_CREDITS`), with `NANSEN_LIVE_ENABLED` as a kill switch. The floor is the hard backstop; the rate limit and a short response cache are best-effort per instance.
+
+Configured with a key, it is a hands-on proof the pipeline is real. Without one, it degrades to a graceful "unavailable" state — the static backtest never depends on it.
+
 ## Architecture
 
-Crucible never ships an API key and never calls Nansen from the browser.
+Crucible never ships an API key, and the browser never calls Nansen directly — the offline builder bakes the dataset, and a hardened server-side proxy powers the live explorer.
 
 ```
  scripts/build-dataset.ts        public/data/dataset.json        src/  (React)
@@ -49,6 +66,7 @@ Crucible never ships an API key and never calls Nansen from the browser.
 - **Offline builder** ([scripts/build-dataset.ts](scripts/build-dataset.ts)) screens a liquid universe, then for each token pulls one flow-summary per decision date, one OHLCV series, and the top Smart Money wallets active in the signal window, and assembles no-look-ahead scenarios. Every call is disk-cached by `sha256(endpoint + body)`, so re-runs cost **zero credits** and the build is fully resumable.
 - **Baked dataset** is a single static JSON. The live app is therefore crash-proof and offline-safe — no key, no rate limits, no runtime spend.
 - **Backtest engine** ([shared/backtest.ts](shared/backtest.ts)) is pure, dependency-free, and identical in the builder and the browser.
+- **Live proxy** ([api/nansen.ts](api/nansen.ts), core in [shared/liveQuery.ts](shared/liveQuery.ts)) is the only code that calls Nansen at runtime — server-side, key-holding, and independent of the dataset. Disable or unconfigure it and the backtest is untouched. See [Live API explorer](#live-api-explorer).
 
 Building the shipped dataset made **2,152 real Nansen calls** — 1,116 historical flow-summary, 1,002 who-bought-sold (the wallet identities), 30 OHLCV series, and 4 universe screens — comfortably over the buildathon's 1,000-call bar. At Nansen's per-endpoint pricing that is roughly **6,700 credits**.
 
@@ -69,18 +87,28 @@ CONFIRM=1 npm run build:dataset   # full build (guarded; ~5.6k credits, resumabl
 
 `npm run build:dataset -- --sample` writes a tiny sample dataset for a near-free dry run.
 
+To run the live explorer locally (optional — needs a key):
+
+```bash
+npm run dev            # terminal 1: the app on http://localhost:5173
+npm run dev:proxy      # terminal 2: the server-side proxy on :8787 (reads .env.local)
+```
+
+Vite forwards `/api/*` to the proxy, so the explorer hits real Nansen exactly as it does in production. In production the same core runs inside a Vercel serverless function — set `NANSEN_API_KEY` (and optionally `NANSEN_MIN_CREDITS` / `NANSEN_LIVE_ENABLED`) in the Vercel project's environment variables.
+
 ## For judges — verify it in a minute
 
 - **No key needed.** `npm install && npm run dev` runs the whole app against the committed dataset. Nothing calls the network at runtime.
 - **No look-ahead, checkable.** Every scenario stores its decision date, the flow window *ending* on it, and forward returns measured *after* it ([shared/backtest.ts](shared/backtest.ts) is the single source of truth for both the builder and the browser — same math, no divergence).
 - **Nansen drives the logic, not the decoration.** Four endpoints do the work: `tgm/historical-token-flow-summary` (the signal), `tgm/historical-token-ohlcv` (the outcome), `token-screener` (the universe), and `tgm/who-bought-sold` (the wallet identities in each drill-down).
+- **See it live.** The in-app live explorer runs any of the four calls against Nansen on demand — across every chain each endpoint supports — and shows the exact request and raw response beside the result. It is a public endpoint kept safe by an allowlist, per-IP rate limiting, and a credit floor, with the key held server-side.
 - **Reproducible.** The disk cache makes a rebuild cost zero credits; delete `.cache/` and re-run to pay for a full rebuild from scratch. `npm run smoke` (~11 credits) confirms auth and endpoint shapes before any spend.
 - **Honest by design.** Presets are calibrated to show winners, losers, *and* noise — including a signal that underperforms holding. The method and its limits are stated in-app and below.
 - **Tested where it counts.** The backtest engine has a pure unit suite ([shared/backtest.test.ts](shared/backtest.test.ts)) that pins the invariants trust depends on: horizon filtering (no look-ahead leak), raw median vs winsorized mean, the equal-weight-basket equity curve and its drawdown, and that the receipts list always matches the aggregate count. `npm test` — green on every push via CI.
 
 ## Stack
 
-Vite · React 18 · TypeScript (strict) · Tailwind. The equity curve is hand-drawn SVG — no chart dependency. Offline scripts run on `tsx`; the engine is unit-tested with Vitest and gated by GitHub Actions CI.
+Vite · React 18 · TypeScript (strict) · Tailwind. The equity curve is hand-drawn SVG — no chart dependency. Offline scripts run on `tsx`; the engine is unit-tested with Vitest and gated by GitHub Actions CI. The live explorer is one Vercel serverless function that shares the same typed core, exercised locally by a `tsx` dev proxy.
 
 ## Limits
 
