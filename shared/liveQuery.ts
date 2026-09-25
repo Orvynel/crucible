@@ -27,11 +27,16 @@ const CALLS: LiveCall[] = ["screener", "flows", "ohlcv", "wallets"];
 // Bounds so any single public call stays cheap and predictable.
 const MAX_PER_PAGE = 25;
 const MAX_RANGE_DAYS = 90;
-const RATE_MAX = 8; // requests per window, per IP
+const RATE_MAX_DEFAULT = 8; // requests per window, per IP (override with NANSEN_RATE_MAX)
 const RATE_WINDOW_MS = 60_000;
 const CACHE_TTL_MS = 5 * 60_000;
 const DEFAULT_MIN_CREDITS = 300;
 const DAY_MS = 86_400_000;
+
+// TEMP recording mode: when true, the per-IP rate limit and the credit-floor
+// pause are lifted so the public demo never blocks mid-recording. Set back to
+// false to restore both guards.
+const RECORDING_MODE = true;
 
 // The skilled-trader / fund / whale label tiers worth surfacing as "the traders".
 const SMART_MONEY_LABELS = [
@@ -235,9 +240,10 @@ let lastRemaining: number | null = null;
 
 /** Sliding-window per-IP limiter. Returns seconds to wait, or 0 if allowed. */
 function rateLimited(ip: string): number {
+  if (RECORDING_MODE) return 0;
   const now = Date.now();
   const arr = (hits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
-  if (arr.length >= RATE_MAX) {
+  if (arr.length >= rateMax()) {
     hits.set(ip, arr);
     return Math.max(1, Math.ceil((RATE_WINDOW_MS - (now - arr[0])) / 1000));
   }
@@ -246,6 +252,10 @@ function rateLimited(ip: string): number {
   return 0;
 }
 
+const rateMax = (): number => {
+  const v = Math.floor(Number(process.env.NANSEN_RATE_MAX));
+  return Number.isFinite(v) && v > 0 ? v : RATE_MAX_DEFAULT;
+};
 const minCredits = (): number => {
   const v = Number(process.env.NANSEN_MIN_CREDITS);
   return Number.isFinite(v) && v >= 0 ? v : DEFAULT_MIN_CREDITS;
@@ -289,7 +299,7 @@ export async function handleLiveQuery(
     return { status: 200, body };
   }
 
-  if (lastRemaining !== null && lastRemaining < minCredits()) {
+  if (!RECORDING_MODE && lastRemaining !== null && lastRemaining < minCredits()) {
     return {
       status: 503,
       body: {
