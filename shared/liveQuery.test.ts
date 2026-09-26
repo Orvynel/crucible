@@ -46,12 +46,12 @@ describe("validateInput", () => {
     expect(r.ok).toBe(false);
   });
 
-  it("accepts a widened EVM chain (arbitrum)", () => {
-    expect(pass({ call: "flows", chain: "arbitrum", token_address: UNI }).chain).toBe("arbitrum");
+  it("accepts a widened EVM chain on wallets (arbitrum)", () => {
+    expect(pass({ call: "wallets", chain: "arbitrum", token_address: UNI }).chain).toBe("arbitrum");
   });
 
-  it("accepts a non-EVM/non-Solana chain with a plausible address (tron)", () => {
-    const r = validateInput({ call: "ohlcv", chain: "tron", token_address: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t" });
+  it("accepts a non-EVM/non-Solana chain with a plausible address (tron on wallets)", () => {
+    const r = validateInput({ call: "wallets", chain: "tron", token_address: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t" });
     expect(r.ok).toBe(true);
   });
 
@@ -61,9 +61,22 @@ describe("validateInput", () => {
     if (!r.ok) expect(r.error).toBe("invalid_input");
   });
 
-  it("accepts bitcoin on OHLCV, where Nansen supports it", () => {
-    const r = validateInput({ call: "ohlcv", chain: "bitcoin", token_address: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" });
-    expect(r.ok).toBe(true);
+  it("accepts bitcoin on the screener, where Nansen supports it — but not on OHLCV", () => {
+    expect(pass({ call: "screener", chain: "bitcoin" }).chain).toBe("bitcoin");
+    expect(validateInput({ call: "ohlcv", chain: "bitcoin", token_address: UNI }).ok).toBe(false);
+  });
+
+  // Regression for the exact 422 a user hit: Nansen flow-summary accepts only
+  // base/bnb/ethereum/solana, so wider chains must be rejected before we ever spend.
+  it("rejects robinhood on flows (verified live: flow-summary supports only eth/solana/base/bnb)", () => {
+    const r = validateInput({ call: "flows", chain: "robinhood", token_address: UNI });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error).toBe("invalid_input");
+  });
+
+  it("accepts hyperliquid on OHLCV but rejects it on flows (verified live)", () => {
+    expect(pass({ call: "ohlcv", chain: "hyperliquid", token_address: UNI }).chain).toBe("hyperliquid");
+    expect(validateInput({ call: "flows", chain: "hyperliquid", token_address: UNI }).ok).toBe(false);
   });
 
   it("accepts citrea on the screener but not on OHLCV", () => {

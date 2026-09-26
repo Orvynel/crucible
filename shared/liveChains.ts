@@ -1,10 +1,13 @@
 // Every chain the four live Nansen "Token God Mode" calls support, with the EXACT
-// slug each endpoint expects. Sourced from Nansen's own API docs — the supported
-// sets differ per endpoint (the screener alone lists citrea + bitcoin; OHLCV is the
-// broadest, adding Aptos/Algorand/Stellar/etc.), so the allowlist is keyed by call
-// rather than assuming one universal list. Pure data + validators: imported by BOTH
-// the server core (liveQuery.ts) and the browser (LiveExplorer) — no env, no fetch,
-// nothing that could drag the key-holding proxy into the client bundle.
+// slug each endpoint expects. VERIFIED against Nansen's live API — each endpoint's own
+// 422 "Valid options are: …" body is the source of truth, NOT the published docs
+// (which overstate the flow/OHLCV sets). The sets differ sharply per endpoint: the
+// screener is broad (27 chains, incl. citrea + bitcoin) and who-bought-sold nearly as
+// broad (26), but flow-summary accepts only 4 (base/bnb/ethereum/solana) and OHLCV
+// only 5 (those + hyperliquid). So the allowlist is keyed by call, never one universal
+// list. Pure data + validators: imported by BOTH the server core (liveQuery.ts) and
+// the browser (LiveExplorer) — no env, no fetch, nothing that could drag the
+// key-holding proxy into the client bundle.
 import type { LiveCall } from "./liveTypes";
 
 // Order here is display order (popular chains first); membership is what matters.
@@ -14,26 +17,26 @@ export const SCREENER_CHAINS = [
   "starknet", "injective", "mantra", "iotaevm", "plasma", "arc", "robinhood", "citrea", "bitcoin",
 ] as const;
 
-export const FLOW_CHAINS = [
+// flow-summary is the strictest endpoint: Nansen accepts exactly these 4 (verified
+// live — a 422 "Valid options are: 'base', 'bnb', 'ethereum' or 'solana'" otherwise).
+export const FLOW_CHAINS = ["ethereum", "solana", "base", "bnb"] as const;
+
+// OHLCV adds hyperliquid to the flow set — and nothing else (verified live).
+export const OHLCV_CHAINS = ["ethereum", "solana", "base", "bnb", "hyperliquid"] as const;
+
+// who-bought-sold is broad — 26 chains (verified live), NOT the flow set. It has its
+// own explicit list; do not re-alias it to FLOW_CHAINS.
+export const WALLET_CHAINS = [
   "ethereum", "solana", "base", "bnb", "arbitrum", "optimism", "polygon", "avalanche",
   "sonic", "linea", "mantle", "hyperevm", "hyperliquid", "monad", "sei", "tron", "ton", "sui",
   "near", "starknet", "injective", "mantra", "iotaevm", "plasma", "arc", "robinhood",
 ] as const;
 
-export const OHLCV_CHAINS = [
-  "ethereum", "solana", "base", "bnb", "arbitrum", "optimism", "polygon", "avalanche",
-  "sonic", "linea", "mantle", "hyperevm", "hyperliquid", "monad", "sei", "tron", "ton", "sui",
-  "near", "starknet", "injective", "mantra", "iotaevm", "plasma", "arc", "robinhood", "bitcoin",
-  "aptos", "algorand", "stellar", "stacks", "chiliz", "bitlayer", "gravity", "viction",
-] as const;
-
-// who-bought-sold shares the flows chain set exactly (per Nansen's docs).
-export const WALLET_CHAINS = FLOW_CHAINS;
-
 export type LiveChain =
   | (typeof SCREENER_CHAINS)[number]
   | (typeof FLOW_CHAINS)[number]
-  | (typeof OHLCV_CHAINS)[number];
+  | (typeof OHLCV_CHAINS)[number]
+  | (typeof WALLET_CHAINS)[number];
 
 export const CALL_CHAINS: Record<LiveCall, readonly LiveChain[]> = {
   screener: SCREENER_CHAINS,
@@ -50,8 +53,6 @@ export const CHAIN_LABELS: Record<LiveChain, string> = {
   ton: "TON", sui: "Sui", near: "NEAR", starknet: "Starknet",
   injective: "Injective", mantra: "Mantra", iotaevm: "IOTA EVM", plasma: "Plasma",
   arc: "Arc", robinhood: "Robinhood", citrea: "Citrea", bitcoin: "Bitcoin",
-  aptos: "Aptos", algorand: "Algorand", stellar: "Stellar", stacks: "Stacks",
-  chiliz: "Chiliz", bitlayer: "Bitlayer", gravity: "Gravity", viction: "Viction",
 };
 
 export function isChainAllowed(call: LiveCall, chain: string): boolean {
