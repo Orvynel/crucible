@@ -322,8 +322,14 @@ export async function handleLiveQuery(
     return { status: 502, body: { ok: false, error: "upstream_error", message: "Couldn't reach Nansen. Try again." } };
   }
 
-  const remaining = Number(res.headers.get("x-nansen-credits-remaining"));
-  if (Number.isFinite(remaining)) lastRemaining = remaining;
+  // Only trust the balance when the header is actually present. Nansen omits
+  // x-nansen-credits-remaining on error responses (confirmed on a live 422), and
+  // Number(null) === 0 would poison lastRemaining → falsely trip the credit floor and
+  // "pause" a fully funded account. Mirror the offline client's !== null guard.
+  const remainingHeader = res.headers.get("x-nansen-credits-remaining");
+  if (remainingHeader !== null && Number.isFinite(Number(remainingHeader))) {
+    lastRemaining = Number(remainingHeader);
+  }
   const costHeader = Number(res.headers.get("x-nansen-credits-cost"));
   const realCost = Number.isFinite(costHeader) && costHeader > 0 ? costHeader : cost;
 
